@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="kk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<style>:root{color-scheme:light;padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom)}body{margin:0;font:14px system-ui,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
+</head>
+<body>
+<title>Шірік-Рабат обалары</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=PT+Serif:ital,wght@0,400;0,700;1,400&family=PT+Sans:wght@400;700&family=PT+Mono&display=swap">
+<style>
+/* Layout: single-column phone card opened from the QR plaque — model, facts, three tabs, links */
+:root{
+  --bg:#f1ebdf; --paper:#fbf8f2; --fg:#251d15; --muted:#76685a; --line:#ddd2c0;
+  --glaze:#16706d; --clay:#a9592f; --iron:#3b3027; --sky:#e9e1d1; --risk:#b8432e;
+  --display:"PT Serif",Georgia,serif; --body:"PT Sans","Segoe UI",Arial,sans-serif; --mono:"PT Mono",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#17130f; --paper:#211b16; --fg:#efe6d7; --muted:#a7988a; --line:#3a3027;
+  --glaze:#4db5ae; --clay:#de8e5e; --iron:#e7dccb; --sky:#1d1813; --risk:#e8705a; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#17130f; --paper:#211b16; --fg:#efe6d7; --muted:#a7988a; --line:#3a3027;
+  --glaze:#4db5ae; --clay:#de8e5e; --iron:#e7dccb; --sky:#1d1813; --risk:#e8705a; color-scheme:dark}
+html,body{background:var(--bg);color:var(--fg)}
+body{font-family:var(--body);font-size:16px;line-height:1.55}
+.wrap{max-width:620px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+:focus-visible{outline:2px solid var(--glaze);outline-offset:2px}
+h1,h2{font-family:var(--display);line-height:1.15;text-wrap:balance;margin:0}
+.top{display:flex;justify-content:space-between;align-items:center;gap:10px;padding-block:14px 10px}
+.brand{font:700 11px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--clay)}
+.lang{display:flex;border:1px solid var(--line);border-radius:6px;overflow:hidden;background:var(--paper)}
+.lang button{font:700 12px var(--mono);background:none;border:0;color:var(--muted);padding:7px 10px;cursor:pointer}
+.lang button[aria-pressed="true"]{background:var(--iron);color:var(--paper)}
+.model{position:relative;height:250px;background:var(--sky);border-radius:10px;overflow:hidden;border:1px solid var(--line);
+  background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);background-size:24px 24px}
+#c{display:block;width:100%;height:100%;touch-action:none;cursor:grab}
+.tag3d{position:absolute;left:10px;bottom:10px;font:700 11px var(--mono);color:var(--muted);background:var(--paper);border:1px solid var(--line);padding:3px 7px;border-radius:4px}
+.code{position:absolute;right:10px;top:10px;font:700 12px var(--mono);color:#fff;background:var(--clay);padding:3px 8px;border-radius:4px}
+.head{padding-block:18px 14px}
+h1{font-size:clamp(25px,7vw,32px)}
+.period{font:700 13px var(--mono);color:var(--glaze);margin-top:8px}
+.facts{display:grid;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.fact{background:var(--paper);padding:10px 14px;display:grid;grid-template-columns:110px minmax(0,1fr);gap:10px;align-items:start}
+.fact dt{font:700 10.5px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding-top:3px}
+.fact dd{margin:0;font-size:14.5px;font-weight:700}
+.risk{display:flex;gap:3px;margin-top:6px}.risk span{width:24px;height:5px;border-radius:2px;background:var(--line)}.risk span.f{background:var(--risk)}
+.tabs{display:flex;position:sticky;top:env(safe-area-inset-top,0px);z-index:2;background:var(--bg);border-bottom:1px solid var(--line);margin-top:20px;overflow-x:auto;scrollbar-width:none}
+.tab{all:unset;cursor:pointer;font:700 14px var(--body);padding:12px 14px;color:var(--muted);border-bottom:2px solid transparent;white-space:nowrap}
+.tab[aria-selected="true"]{color:var(--fg);border-bottom-color:var(--glaze)}
+.panel{padding-block:18px 8px;min-height:240px}
+.panel p{margin:0 0 14px}
+.panel ul{margin:0;padding:0;list-style:none;display:grid;gap:10px}
+.panel li{display:grid;grid-template-columns:26px 1fr;gap:10px;background:var(--paper);border:1px solid var(--line);border-radius:6px;padding:10px 12px;font-size:15px}
+.panel li b{font:700 12px var(--mono);color:var(--glaze);padding-top:2px}
+.src{border-radius:8px;padding:14px;margin-bottom:12px;background:var(--paper);border:1px solid var(--line)}
+.src h3{margin:0 0 6px;font:700 11px var(--mono);letter-spacing:.1em;text-transform:uppercase}
+.src.oral h3{color:var(--clay)}.src.arch h3{color:var(--glaze)}
+.src p{margin:0;font-size:15px}.src.oral p{font-family:var(--display);font-style:italic}
+.verdict{border-left:3px solid var(--iron);padding:2px 0 2px 12px;font-size:15px}
+.links{display:grid;gap:8px;padding-block:18px}
+.btn{display:flex;justify-content:space-between;align-items:center;font:700 15px var(--body);text-decoration:none;color:var(--paper);background:var(--iron);border-radius:8px;padding:14px 16px}
+.btn.ghost{background:var(--paper);color:var(--fg);border:1px solid var(--line)}
+footer{color:var(--muted);font-size:12px;padding-block:6px 30px;border-top:1px solid var(--line)}
+</style>
+
+<div class="wrap">
+  <div class="top">
+    <div class="brand" id="brand"></div>
+    <div class="lang" role="group" aria-label="Language">
+      <button id="l-kk" data-l="kk" aria-pressed="true">ҚАЗ</button>
+      <button id="l-ru" data-l="ru" aria-pressed="false">РУС</button>
+      <button id="l-en" data-l="en" aria-pressed="false">ENG</button>
+    </div>
+  </div>
+  <div class="model"><canvas id="c" aria-label="3D model"></canvas><span class="tag3d" id="tag3d">3D</span><span class="code" id="code"></span></div>
+  <div class="head"><h1 id="name"></h1><div class="period" id="period"></div></div>
+  <dl class="facts" id="facts" style="margin:0"></dl>
+  <div class="tabs" role="tablist" id="tabs"></div>
+  <div class="panel" role="tabpanel" id="panel"></div>
+  <div class="links" id="links"></div>
+  <footer id="foot"></footer>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+<script>
+const S = {"id":"shirik","code":"ЖЛ-01","kind":"kurgan","risk":3,"maps":"https://www.google.com/maps/search/?api=1&query=%D0%A8%D1%96%D1%80%D1%96%D0%BA-%D0%A0%D0%B0%D0%B1%D0%B0%D1%82+%D2%9A%D1%8B%D0%B7%D1%8B%D0%BB%D0%BE%D1%80%D0%B4%D0%B0+%D2%9A%D0%B0%D0%B7%D0%B0%D2%9B%D1%81%D1%82%D0%B0%D0%BD","kk":{"name":"Шірік-Рабат төбелері маңайындағы сақ обалары","short":"Шірік-Рабат обалары","period":"б.з.д. V–II ғғ.","place":"Жалағаш қалашығынан оңтүстік-батысқа қарай","state":"Жартылай тоналған, эрозияға ұшыраған","hist":["Шірік-Рабат — Жаңадарияның құрғап қалған арнасы бойындағы сақ дәуірінің ірі қамалы. Ескерткішті 1940-жылдары С.П. Толстов бастаған Хорезм археологиялық-этнографиялық экспедициясы зерттеп, ғылыми айналымға енгізген. Кейін қазба жұмыстарын Ж. Құрманқұлов жалғастырды.","Қамал айналасындағы обалар — сақ-апасиак тайпаларының жерлеу орындары. Сақтар үйінді астына ақсүйектерін жерлеп, қабірге қару-жарақ, әшекей мен қыш ыдыс салған. Сондықтан обалар тайпаның әлеуметтік құрылымы мен наным-сенімін анықтайтын негізгі дерек көзі.","Шірік-Рабат ауданның ең танымал ескерткіші болса да, оның маңындағы ұсақ обалар ғылыми айналымда «көлеңкеде» қалған: олардың көбі түгенделмеген, нақты саны белгісіз."],"oral":"Қариялар төбелерді «ертедегі батырлар жатқан жер» деп атайды. Жаңадария мен Қуаңдария бойын жайлаған қазақ рулары көшкенде осы биік төбелерді бағдар ретінде пайдаланған.","arch":"Обалардың бір бөлігінің төбесінде тонаушылар қазған шұңқырлар бар. Бұл қабірлер ертеде ашылғанын көрсетеді, бірақ үйінді құрылымы мен жерлеу ғұрпының іздері әлі де сақталған.","verdict":"Аңыздағы «батырлар қорымы» ұғымы археологиялық деректегі ақсүйектер жерлеуімен сәйкес келеді.","protect":["Обаларды түгендеп, әрқайсысына GPS-координата мен паспорт беру","Дронмен аэрофотосурет түсіріп, үйінділердің 3D-моделін (фотограмметрия) жасау","Тонау шұңқырларын бекітіп, жел эрозиясына қарсы өсімдік жамылғысын қалпына келтіру","Обалар тобының шекарасына қорғау белгілері мен QR-тақтайша орнату"]},"ru":{"name":"Сакские курганы у холмов Шірік-Рабат","short":"Курганы Шірік-Рабат","period":"V–II вв. до н.э.","place":"к юго-западу от пос. Жалагаш","state":"Частично разграблены, подвержены эрозии","hist":["Шірік-Рабат (Чирик-Рабат) — крупная сакская крепость на сухом русле Жанадарьи. Памятник ввела в научный оборот Хорезмская археолого-этнографическая экспедиция С.П. Толстова в 1940-х годах; позднее раскопки продолжил Ж. Курманкулов.","Курганы вокруг крепости — погребения саков-апасиаков. Под насыпями хоронили знать с оружием, украшениями и керамикой, поэтому курганы — главный источник о социальном строе и верованиях племён.","Мелкие курганы остаются в тени самой крепости: многие не учтены, их точное число неизвестно."],"oral":"Старожилы называют холмы «местом, где лежат древние батыры». Казахские роды при кочёвках использовали высокие курганы как ориентиры.","arch":"На вершинах части курганов видны грабительские воронки: погребения вскрывались ещё в древности, но структура насыпей и следы обряда сохранились.","verdict":"Представление о «кладбище батыров» совпадает с археологическими данными о погребениях знати.","protect":["Учесть курганы, присвоить каждому GPS-координаты и паспорт","Провести аэрофотосъёмку дроном и создать 3D-модели насыпей","Укрепить грабительские воронки, восстановить растительный покров против ветровой эрозии","Установить охранные знаки и QR-табличку на границе группы"]},"en":{"name":"Saka burial mounds near Shirik-Rabat","short":"Shirik-Rabat mounds","period":"5th–2nd c. BC","place":"south-west of Zhalagash","state":"Partly looted, eroding","hist":["Shirik-Rabat (Chirik-Rabat) is a large Saka fortress on the dry Zhanadarya channel. S.P. Tolstov's Khorezm expedition brought it into scholarship in the 1940s; Zh. Kurmankulov later continued the excavations.","The mounds around the fortress are burials of the Saka-Apasiak tribes. Nobles were buried under the earthworks with weapons, ornaments and pottery, which makes the mounds the main evidence for their society and beliefs.","The smaller mounds sit in the fortress's shadow: many have never been recorded and their exact number is unknown."],"oral":"Elders call the mounds the place where ancient heroes lie. Kazakh clans on seasonal migration used the tall mounds as landmarks.","arch":"Looters' pits on top of several mounds show the graves were opened long ago, but the mound structure and traces of the burial rite survive.","verdict":"The 'heroes' cemetery' of legend matches the archaeological evidence of elite burials.","protect":["Record every mound with GPS coordinates and a site passport","Drone survey and photogrammetric 3D models of the mounds","Stabilise looters' pits and restore vegetation against wind erosion","Place protective markers and a QR plaque at the group's boundary"]}};
+const MAP = "../index.html#" + S.id;
+const UI = {
+ kk:{brand:"Жалағаш · тарихи ескерткіш",place:"Орны",state:"Жағдайы",risk:"Қауіп",riskL:["","орташа","жоғары","өте жоғары"],tabs:["Тарихы","Аңыз бен дерек","Сақтау шаралары"],
+  oral:"Ауызша тарих",arch:"Археологиялық дерек",map:"Толық өлкетану картасы",maps:"Google Maps: жол көрсету",drag:"3D · айналдыру",
+  foot:"«QR-Тарих» жобасы · Жалағаш ауданы, 2026. Ескерткішті қорғау — ортақ парыз: үйінділерді қазбаңыз, қыш сынықтарын алып кетпеңіз."},
+ ru:{brand:"Жалагаш · памятник истории",place:"Место",state:"Состояние",risk:"Угроза",riskL:["","средняя","высокая","очень высокая"],tabs:["История","Легенда и факты","Меры сохранения"],
+  oral:"Устная история",arch:"Археологические данные",map:"Полная краеведческая карта",maps:"Google Maps: маршрут",drag:"3D · вращайте",
+  foot:"Проект «QR-Тарих» · Жалагашский район, 2026. Берегите памятник: не раскапывайте насыпи и не уносите черепки."},
+ en:{brand:"Zhalagash · historic monument",place:"Location",state:"Condition",risk:"Threat",riskL:["","moderate","high","very high"],tabs:["History","Legend vs evidence","Conservation"],
+  oral:"Oral history",arch:"Archaeological evidence",map:"Full heritage map",maps:"Google Maps: directions",drag:"3D · drag to rotate",
+  foot:"QR-Tarikh project · Zhalagash District, 2026. Please protect the site: do not dig the mounds or take pottery away."}
+};
+let lang="kk",tab=0;
+const $=s=>document.querySelector(s);
+function render(){
+  const t=S[lang],u=UI[lang];
+  document.documentElement.lang=lang;
+  document.querySelectorAll(".lang button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.l===lang));
+  $("#brand").textContent=u.brand;$("#code").textContent=S.code;$("#tag3d").textContent=u.drag;
+  $("#name").textContent=t.name;$("#period").textContent=t.period;
+  $("#facts").innerHTML=`<div class="fact"><dt>${u.place}</dt><dd>${t.place}</dd></div>
+   <div class="fact"><dt>${u.state}</dt><dd>${t.state}<div class="risk" aria-label="${u.risk}: ${u.riskL[S.risk]}">${[1,2,3].map(k=>`<span class="${k<=S.risk?"f":""}"></span>`).join("")}</div></dd></div>`;
+  $("#tabs").innerHTML=u.tabs.map((n,i)=>`<button class="tab" role="tab" id="tab-${i}" aria-selected="${i===tab}" data-t="${i}">${n}</button>`).join("");
+  $("#tabs").querySelectorAll(".tab").forEach(b=>b.onclick=()=>{tab=+b.dataset.t;render();});
+  let body="";
+  if(tab===0)body=t.hist.map(p=>`<p>${p}</p>`).join("");
+  if(tab===1)body=`<div class="src oral"><h3>${u.oral}</h3><p>${t.oral}</p></div><div class="src arch"><h3>${u.arch}</h3><p>${t.arch}</p></div><div class="verdict">${t.verdict}</div>`;
+  if(tab===2)body=`<ul>${t.protect.map((p,i)=>`<li><b>${String(i+1).padStart(2,"0")}</b><span>${p}</span></li>`).join("")}</ul>`;
+  $("#panel").innerHTML=body;
+  $("#links").innerHTML=`<a class="btn" href="${MAP}" target="_blank" rel="noopener"><span>${u.map}</span><span>→</span></a><a class="btn ghost" href="${S.maps}" target="_blank" rel="noopener"><span>${u.maps}</span><span>↗</span></a>`;
+  $("#foot").textContent=u.foot;
+  try{localStorage.setItem("zh-lang",lang)}catch(e){}
+}
+document.querySelectorAll(".lang button").forEach(b=>b.onclick=()=>{lang=b.dataset.l;render();});
+try{const l=localStorage.getItem("zh-lang");if(l&&UI[l])lang=l;}catch(e){}
+render();
+
+/* 3D model */
+const canvas=$("#c"),box3=canvas.parentElement;
+const renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:true});
+renderer.setPixelRatio(Math.min(devicePixelRatio,2));renderer.shadowMap.enabled=true;
+const scene=new THREE.Scene(),camera=new THREE.PerspectiveCamera(38,1,0.1,50);
+camera.position.set(2.6,2.2,3.4);
+const controls=new THREE.OrbitControls(camera,canvas);controls.enableDamping=true;controls.enablePan=false;controls.minDistance=2.2;controls.maxDistance=7;controls.maxPolarAngle=1.4;controls.target.set(0,0.25,0);
+controls.autoRotate=!matchMedia("(prefers-reduced-motion: reduce)").matches;controls.autoRotateSpeed=1.2;
+canvas.addEventListener("pointerdown",()=>controls.autoRotate=false);
+scene.add(new THREE.HemisphereLight(0xfff3df,0x6a5841,0.75));
+const sun=new THREE.DirectionalLight(0xffdcae,0.95);sun.position.set(-3,5,3);sun.castShadow=true;sun.shadow.mapSize.set(1024,1024);scene.add(sun);
+const M=c=>new THREE.MeshLambertMaterial({color:c});
+const brick=M(0xc9a271),brickD=M(0x9c784e),earth=M(0xb38b5b),tile=M(0x2e8c86),plaster=M(0xe7dcc8);
+const bx=(w,h,d,m)=>new THREE.Mesh(new THREE.BoxGeometry(w,h,d),m);
+const ground=new THREE.Mesh(new THREE.CylinderGeometry(1.9,2.0,0.12,48),M(0xd9c193));ground.position.y=-0.06;ground.receiveShadow=true;scene.add(ground);
+const g=new THREE.Group(),kind=S.kind;
+if(kind==="kurgan"){
+  [[0,0,0.55],[0.95,0.45,0.4],[-0.75,0.6,0.34],[0.35,-0.85,0.3],[-0.5,-0.55,0.24]].forEach(([x,z,r])=>{
+    const m=new THREE.Mesh(new THREE.SphereGeometry(r,28,12,0,Math.PI*2,0,Math.PI/2),earth);m.scale.y=0.5;m.position.set(x,0,z);g.add(m);
+    const pit=new THREE.Mesh(new THREE.CylinderGeometry(r*0.26,r*0.12,0.06,12),brickD);pit.position.set(x,r*0.47,z);g.add(pit);});
+}else if(kind==="tepe"){
+  const m=new THREE.Mesh(new THREE.CylinderGeometry(0.8,1.15,0.45,9),earth);m.position.y=0.22;g.add(m);
+  for(let i=0;i<6;i++){const a=i/6*Math.PI*2,w=bx(0.32,0.2+0.08*(i%2),0.07,brick);w.position.set(Math.cos(a)*0.6,0.54,Math.sin(a)*0.6);w.rotation.y=-a+Math.PI/2;g.add(w);}
+  [[0.2,0.1],[-0.3,0.2],[0.1,-0.35],[-0.15,-0.1],[0.35,-0.2]].forEach(([x,z],i)=>{const s=bx(0.09,0.02,0.07,i%2?tile:brickD);s.position.set(x,0.46,z);s.rotation.y=i;g.add(s);});
+}else if(kind==="mazar"){
+  const base=bx(0.8,0.55,0.8,brick);base.position.y=0.27;g.add(base);
+  const drum=new THREE.Mesh(new THREE.CylinderGeometry(0.36,0.38,0.15,20),brick);drum.position.y=0.62;g.add(drum);
+  const dome=new THREE.Mesh(new THREE.SphereGeometry(0.36,20,10,0,Math.PI*1.25,0,Math.PI/2),brickD);dome.position.y=0.69;g.add(dome);
+  const portal=bx(0.32,0.62,0.12,brick);portal.position.set(0,0.31,0.44);g.add(portal);
+  const arch=bx(0.16,0.36,0.04,brickD);arch.position.set(0,0.2,0.51);g.add(arch);
+  [[1.0,0.35],[-0.95,0.55],[0.75,-0.95],[-0.6,-0.85],[1.2,-0.3]].forEach(([x,z],i)=>{const s=new THREE.Mesh(new THREE.SphereGeometry(0.18,10,6,0,Math.PI*2,0,Math.PI/2),earth);s.scale.y=0.5;s.position.set(x,0,z);g.add(s);if(i%2){const t=bx(0.05,0.22,0.02,brickD);t.position.set(x,0.12,z);g.add(t);}});
+}else{
+  const court=bx(1.7,0.32,1.3,brick);court.position.y=0.16;g.add(court);
+  const hole=bx(1.3,0.34,0.9,earth);hole.position.y=0.17;g.add(hole);
+  const mz=new THREE.Mesh(new THREE.CylinderGeometry(0.3,0.32,0.5,16),plaster);mz.position.set(0,0.55,-0.15);g.add(mz);
+  const dome=new THREE.Mesh(new THREE.SphereGeometry(0.31,20,10,0,Math.PI*2,0,Math.PI/2),tile);dome.position.set(0,0.8,-0.15);g.add(dome);
+  [[-0.85,-0.65],[0.85,-0.65]].forEach(([x,z])=>{const t=new THREE.Mesh(new THREE.CylinderGeometry(0.08,0.11,0.65,10),brick);t.position.set(x,0.32,z);g.add(t);});
+}
+g.traverse(o=>{if(o.isMesh){o.castShadow=true;o.receiveShadow=true;}});scene.add(g);
+function resize(){const w=box3.clientWidth,h=box3.clientHeight;renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix();}
+new ResizeObserver(resize).observe(box3);resize();
+(function loop(){requestAnimationFrame(loop);controls.update();renderer.render(scene,camera);})();
+</script>
+
+</body>
+</html>

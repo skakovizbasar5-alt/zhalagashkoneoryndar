@@ -1,0 +1,628 @@
+<!doctype html>
+<html lang="kk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<style>:root{color-scheme:light;padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom)}body{margin:0;font:14px system-ui,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
+</head>
+<body>
+<title>Жалағаш өлкетану картасы</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=PT+Serif:ital,wght@0,400;0,700;1,400&family=PT+Sans:wght@400;700&family=PT+Mono&display=swap">
+<style>
+/* Layout: survey-sheet concept. Map scene first, then a field dossier per site (tabs), route, eras, survey, QR plaque, sources. */
+:root{
+  --bg:#f1ebdf; --paper:#fbf8f2; --fg:#251d15; --muted:#76685a; --line:#ddd2c0;
+  --glaze:#16706d; --clay:#a9592f; --iron:#3b3027; --sky:#e9e1d1; --risk:#b8432e;
+  --display:"PT Serif",Georgia,serif; --body:"PT Sans","Segoe UI",Arial,sans-serif; --mono:"PT Mono",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#17130f; --paper:#211b16; --fg:#efe6d7; --muted:#a7988a; --line:#3a3027;
+  --glaze:#4db5ae; --clay:#de8e5e; --iron:#e7dccb; --sky:#1d1813; --risk:#e8705a; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#17130f; --paper:#211b16; --fg:#efe6d7; --muted:#a7988a; --line:#3a3027;
+  --glaze:#4db5ae; --clay:#de8e5e; --iron:#e7dccb; --sky:#1d1813; --risk:#e8705a; color-scheme:dark}
+html,body{background:var(--bg);color:var(--fg)}
+body{font-family:var(--body);font-size:15.5px;line-height:1.55}
+.wrap{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));max-width:1080px;margin:0 auto}
+:focus-visible{outline:2px solid var(--glaze);outline-offset:2px}
+h1,h2,h3{font-family:var(--display);line-height:1.15;text-wrap:balance;margin:0}
+.eyebrow{font:700 11px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--clay)}
+
+header{padding-block:16px 12px;display:flex;flex-wrap:wrap;gap:10px 16px;align-items:end;justify-content:space-between}
+h1{font-size:clamp(24px,5vw,36px)}
+.sub{color:var(--muted);font-size:13.5px;margin:4px 0 0;max-width:60ch}
+.lang{display:flex;border:1px solid var(--line);border-radius:6px;overflow:hidden;background:var(--paper)}
+.lang button{font:700 12px var(--mono);letter-spacing:.06em;background:none;border:0;color:var(--muted);padding:7px 11px;cursor:pointer}
+.lang button[aria-pressed="true"]{background:var(--iron);color:var(--paper)}
+
+/* stage */
+.stage{position:relative;height:min(64vh,580px);min-height:360px;background:var(--sky);overflow:hidden;border-block:1px solid var(--line)}
+#c{display:block;width:100%;height:100%;touch-action:none;cursor:grab}
+.lbl{position:absolute;left:0;top:0;cursor:pointer;font:700 12px var(--body);background:var(--paper);color:var(--fg);
+  border:1px solid var(--line);padding:3px 9px 3px 3px;border-radius:5px;white-space:nowrap;display:flex;gap:6px;align-items:center;
+  box-shadow:0 3px 10px rgba(30,20,10,.18);transition:opacity .2s}
+.lbl::after{content:"";position:absolute;left:50%;bottom:-6px;width:1px;height:6px;background:var(--iron)}
+.lbl b{font:700 10.5px var(--mono);background:var(--clay);color:#fff;border-radius:3px;padding:2px 4px}
+.lbl.on{background:var(--iron);color:var(--paper);border-color:var(--iron)}
+.lbl.on b{background:var(--glaze)}
+.lbl.geo{background:transparent;border:0;box-shadow:none;font:italic 400 12px var(--display);color:var(--muted);pointer-events:none;padding:0}
+.lbl.geo::after{display:none}
+.tools{position:absolute;top:10px;left:max(10px,env(safe-area-inset-left,0px));right:max(10px,env(safe-area-inset-right,0px));display:flex;justify-content:space-between;gap:8px;pointer-events:none}
+.tools>*{pointer-events:auto}
+.tg{display:flex;gap:4px;flex-wrap:wrap}
+.tbtn{font:700 11.5px var(--body);background:color-mix(in srgb,var(--paper) 88%,transparent);color:var(--fg);border:1px solid var(--line);border-radius:5px;padding:6px 9px;cursor:pointer;backdrop-filter:blur(4px)}
+.tbtn[aria-pressed="true"]{border-color:var(--glaze);color:var(--glaze)}
+.compass{font:700 11px var(--mono);color:var(--muted);text-align:center;line-height:1.05;background:color-mix(in srgb,var(--paper) 80%,transparent);border-radius:50%;width:34px;height:34px;display:grid;place-items:center;border:1px solid var(--line)}
+.legend{position:absolute;left:max(10px,env(safe-area-inset-left,0px));bottom:10px;display:flex;flex-wrap:wrap;gap:4px 12px;font:11px var(--mono);color:var(--muted);background:color-mix(in srgb,var(--paper) 85%,transparent);padding:5px 9px;border-radius:5px;max-width:calc(100% - 20px)}
+.legend i{display:inline-block;width:14px;height:3px;vertical-align:middle;margin-right:5px;border-radius:2px}
+
+/* dossier */
+.dossier{display:grid;grid-template-columns:240px minmax(0,1fr);gap:24px;padding-block:22px}
+@media (max-width:780px){.dossier{grid-template-columns:1fr;gap:14px}}
+.list{display:flex;flex-direction:column;gap:2px}
+@media (max-width:780px){.list{flex-direction:row;overflow-x:auto;gap:6px;padding-bottom:4px;scrollbar-width:none}}
+.site{all:unset;cursor:pointer;display:grid;grid-template-columns:auto 1fr;gap:10px;padding:10px 10px;border-radius:6px;border-left:3px solid transparent}
+.site:hover{background:var(--paper)}
+.site[aria-current="true"]{background:var(--paper);border-left-color:var(--clay)}
+@media (max-width:780px){.site{flex:0 0 auto;border-left:0;border:1px solid var(--line);grid-template-columns:auto auto;align-items:center;padding:7px 10px}.site .d{display:none}.site[aria-current="true"]{border-color:var(--clay)}}
+.site .n{font:700 11px var(--mono);color:var(--clay);padding-top:3px}
+.site .t{font-weight:700;line-height:1.25;font-size:14.5px}
+.site .d{font:12px var(--mono);color:var(--muted)}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:8px;overflow:hidden;min-width:0}
+.card-h{padding:20px 22px 14px;display:grid;gap:8px;border-bottom:1px solid var(--line);
+  background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);background-size:22px 22px;background-position:-1px -1px}
+.card-h h2{font-size:clamp(21px,3.6vw,27px);background:var(--paper);justify-self:start;padding-right:6px}
+.facts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1px;background:var(--line);border-bottom:1px solid var(--line)}
+@media (max-width:560px){.facts{grid-template-columns:1fr}}
+.fact{background:var(--paper);padding:10px 14px}
+.fact dt{font:700 10.5px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.fact dd{margin:2px 0 0;font-size:14px;font-weight:700}
+.risk{display:flex;gap:3px;margin-top:5px}.risk span{width:22px;height:5px;border-radius:2px;background:var(--line)}.risk span.f{background:var(--risk)}
+.tabs{display:flex;gap:0;border-bottom:1px solid var(--line);overflow-x:auto;scrollbar-width:none}
+.tab{all:unset;cursor:pointer;font:700 13px var(--body);padding:12px 16px;color:var(--muted);border-bottom:2px solid transparent;white-space:nowrap}
+.tab[aria-selected="true"]{color:var(--fg);border-bottom-color:var(--glaze)}
+.tabpanel{padding:18px 22px 22px}
+.tabpanel p{margin:0 0 12px;max-width:66ch}
+.tabpanel ul{margin:0 0 12px;padding-left:20px;max-width:66ch}.tabpanel li{margin-bottom:6px}
+.compare{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
+@media (max-width:560px){.compare{grid-template-columns:1fr}}
+.src{border:1px solid var(--line);border-radius:6px;padding:12px 14px}
+.src h4{margin:0 0 6px;font:700 11px var(--mono);letter-spacing:.1em;text-transform:uppercase}
+.src.oral h4{color:var(--clay)}.src.arch h4{color:var(--glaze)}
+.src p{margin:0;font-size:14.5px}
+.src.oral p{font-family:var(--display);font-style:italic}
+.verdict{border-left:3px solid var(--iron);padding:4px 0 4px 12px;font-size:14.5px;max-width:66ch}
+.lit{font:12.5px var(--mono);color:var(--muted);margin-top:10px}
+.actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}
+.btn{font:700 13px var(--body);text-decoration:none;color:var(--paper);background:var(--iron);border:1px solid var(--iron);border-radius:5px;padding:8px 13px;cursor:pointer}
+.btn.ghost{background:none;color:var(--fg);border-color:var(--line)}
+
+section.block{padding-block:26px;border-top:1px solid var(--line)}
+.bh{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:6px 16px;margin-bottom:16px}
+.bh h2{font-size:clamp(20px,3.4vw,26px)}
+.bh p{margin:4px 0 0;color:var(--muted);font-size:14px;max-width:60ch}
+
+/* route */
+.route{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0;counter-reset:s}
+@media (max-width:640px){.route{grid-template-columns:1fr}}
+.stop{position:relative;padding:14px 14px 14px 0;border-top:3px solid var(--glaze)}
+@media (max-width:640px){.stop{border-top:0;border-left:3px solid var(--glaze);padding:6px 0 14px 16px}}
+.stop::before{content:"";position:absolute;top:-8px;left:0;width:13px;height:13px;border-radius:50%;background:var(--paper);border:3px solid var(--glaze);box-sizing:border-box}
+@media (max-width:640px){.stop::before{top:6px;left:-8px}}
+.stop .k{font:700 11px var(--mono);color:var(--muted);letter-spacing:.08em}
+.stop .s{font-weight:700;margin:2px 0}
+.stop .x{font-size:13.5px;color:var(--muted)}
+.stop button{all:unset;cursor:pointer;color:var(--glaze);font:700 12.5px var(--body);margin-top:4px;display:inline-block}
+
+/* eras */
+.eras{overflow-x:auto}
+.era-row{display:grid;grid-template-columns:repeat(4,minmax(150px,1fr));gap:4px;min-width:620px}
+.era{background:var(--paper);border:1px solid var(--line);border-radius:6px;padding:12px;display:flex;flex-direction:column;gap:8px}
+.era .k{font:700 11px var(--mono);color:var(--muted)}
+.era h3{font-size:16px}
+.era .x{font-size:13px;color:var(--muted)}
+.pin{all:unset;cursor:pointer;display:flex;gap:6px;align-items:center;font:700 12.5px var(--body);border:1px solid var(--clay);color:var(--clay);border-radius:4px;padding:4px 7px;align-self:flex-start}
+.note{font:11.5px var(--mono);color:var(--muted);margin-top:8px}
+
+/* survey */
+.survey{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px 28px}
+@media (max-width:700px){.survey{grid-template-columns:1fr}}
+.q h3{font:700 14.5px var(--body);margin:0 0 10px}
+.bar{display:grid;grid-template-columns:minmax(0,1fr) 44px;gap:3px 10px;align-items:center;margin-bottom:8px;font-size:13.5px}
+.bar .tr{grid-column:1/-1;height:9px;background:var(--line);border-radius:2px;overflow:hidden}
+.bar .tr i{display:block;height:100%;background:var(--muted)}
+.bar.top .tr i{background:var(--glaze)}
+.bar b{font:700 13px var(--mono);text-align:right;font-variant-numeric:tabular-nums}
+.bar span{min-width:0}
+.kpi{display:flex;flex-wrap:wrap;gap:6px 20px;font-size:13.5px;color:var(--muted);margin-bottom:16px}
+.kpi b{color:var(--fg);font-family:var(--mono)}
+
+/* plaque */
+.plaque-wrap{display:grid;grid-template-columns:auto minmax(0,1fr);gap:28px;align-items:center}
+@media (max-width:700px){.plaque-wrap{grid-template-columns:1fr;justify-items:center}}
+.plaque{width:300px;max-width:100%;border-radius:10px;padding:18px;color:#f3ede4;
+  background:linear-gradient(135deg,#4a4038,#2c251f 55%,#3d342c);box-shadow:inset 0 0 0 1px rgba(255,255,255,.12),0 10px 24px rgba(20,12,4,.3);position:relative}
+.plaque::before,.plaque::after{content:"";position:absolute;top:10px;width:7px;height:7px;border-radius:50%;background:#8d8378;box-shadow:inset 0 1px 1px rgba(0,0,0,.6)}
+.plaque::before{left:10px}.plaque::after{right:10px}
+.plaque .pk{font:700 10px var(--mono);letter-spacing:.14em;text-align:center;color:#d9b48f}
+.plaque h3{font-size:18px;text-align:center;margin:8px 0 4px;color:#fff}
+.plaque .pp{font:12px var(--mono);text-align:center;color:#cfc4b6}
+.qr{background:#fff;padding:10px;border-radius:4px;width:170px;height:170px;margin:14px auto 10px;box-sizing:content-box}
+.qr img,.qr canvas{width:170px!important;height:170px!important}
+.plaque .pl{display:flex;justify-content:center;gap:10px;font:700 10.5px var(--mono);color:#cfc4b6}
+.scheme{display:flex;flex-direction:column;gap:0;max-width:440px}
+.sc{display:grid;grid-template-columns:30px 1fr;gap:10px;padding-bottom:14px;position:relative}
+.sc:not(:last-child)::before{content:"";position:absolute;left:14px;top:28px;bottom:2px;width:1px;background:var(--line)}
+.sc .n{width:28px;height:28px;border-radius:50%;border:1px solid var(--line);display:grid;place-items:center;font:700 12px var(--mono);background:var(--paper)}
+.sc b{display:block;font-size:14.5px}.sc span{font-size:13.5px;color:var(--muted)}
+
+.refs{margin:0;padding-left:20px;font-size:13.5px;color:var(--muted);max-width:75ch}.refs li{margin-bottom:5px}
+footer{color:var(--muted);font-size:12px;padding-block:6px 30px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<div class="wrap">
+<header>
+  <div>
+    <div class="eyebrow" data-i="eyebrow">Қызылорда облысы · Жалағаш ауданы</div>
+    <h1 data-i="title">Жалағаш өлкетану картасы</h1>
+    <p class="sub" data-i="sub">Ұмыт қалған тарихи-сакралды нысандар: 3D орта, ғылыми анықтама және QR-тақтайшалар</p>
+  </div>
+  <div class="lang" role="group" aria-label="Language">
+    <button id="l-kk" data-l="kk" aria-pressed="true">ҚАЗ</button>
+    <button id="l-ru" data-l="ru" aria-pressed="false">РУС</button>
+    <button id="l-en" data-l="en" aria-pressed="false">ENG</button>
+  </div>
+</header>
+</div>
+
+<div class="stage" id="stage">
+  <canvas id="c" aria-label="3D map"></canvas>
+  <div id="labels"></div>
+  <div class="tools">
+    <div class="tg">
+      <button class="tbtn" id="t-route" aria-pressed="true" data-i="tRoute">Маршрут</button>
+      <button class="tbtn" id="t-reset" data-i="tReset">Жалпы көрініс</button>
+    </div>
+    <div class="compass" title="Солтүстік">N<br>▲</div>
+  </div>
+  <div class="legend">
+    <span><i style="background:#3f8f9a"></i><span data-i="lgSyr">Сырдария</span></span>
+    <span><i style="background:#e5dcc6;outline:1px solid #b9a98a"></i><span data-i="lgOld">Құрғақ арна</span></span>
+    <span><i style="background:var(--glaze)"></i><span data-i="lgRoute">Өлкетану соқпағы</span></span>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="dossier">
+    <nav class="list" id="list" aria-label="Sites"></nav>
+    <article class="card" id="card" aria-live="polite"></article>
+  </div>
+
+  <section class="block" id="route">
+    <div class="bh"><div><div class="eyebrow" data-i="rEy">Ұсыныс 3</div><h2 data-i="rH">«Жалағаш өлкетану соқпағы»</h2>
+      <p data-i="rP">7–11 сынып оқушыларына арналған көктемгі-күзгі танымдық-экологиялық экскурсия бағыты.</p></div></div>
+    <div class="route" id="routeList"></div>
+  </section>
+
+  <section class="block">
+    <div class="bh"><div><div class="eyebrow" data-i="eEy">Тарихи қабаттар</div><h2 data-i="eH">Дәуірлер бойынша нысандар</h2>
+      <p data-i="eP">Сыр өңірінің тарихи географиясы: сақ-апасиактардан Қазақ хандығы мен кеңес кезеңіне дейін.</p></div></div>
+    <div class="eras"><div class="era-row" id="eraRow"></div></div>
+    <div class="note" data-i="eNote">Шкала сызықтық емес: әр баған бір тарихи кезеңді көрсетеді.</div>
+  </section>
+
+  <section class="block">
+    <div class="bh"><div><div class="eyebrow" data-i="sEy">Сауалнама · 2023–2024 оқу жылы</div><h2 data-i="sH">Тұрғындар не біледі?</h2>
+      <p data-i="sP">Тарихи орындар туралы ақпараттану деңгейін анықтау сауалнамасы.</p></div></div>
+    <div class="kpi" id="kpi"></div>
+    <div class="survey" id="survey"></div>
+  </section>
+
+  <section class="block">
+    <div class="bh"><div><div class="eyebrow" data-i="qEy">«QR-Тарих» жобасы</div><h2 data-i="qH">Нысан басындағы тақтайша</h2>
+      <p data-i="qP">Металл тақтайшадағы QR-код осы беттің таңдалған нысанын ашады. Тақтайша үлгісі таңдалған нысанмен бірге ауысады.</p></div></div>
+    <div class="plaque-wrap">
+      <div class="plaque" id="plaque"></div>
+      <div class="scheme" id="scheme"></div>
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="bh"><div><div class="eyebrow" data-i="lEy">Дереккөздер</div><h2 data-i="lH">Пайдаланылған әдебиеттер</h2></div></div>
+    <ol class="refs">
+      <li>Байпақов К.М. Қазақстанның ортағасырлық қалалары мен қоныстары. — Алматы: Ғылым, 2010.</li>
+      <li>Толстов С.П. По следам древнехорезмийской цивилизации. — М.-Л.: Изд-во АН СССР, 1948.</li>
+      <li>Сыр елі. Энциклопедия / Бас ред. Б.Ғ. Аяған. — Алматы: Қазақ энциклопедиясы, 2013.</li>
+      <li>Курманкулов Ж. Археологические исследования на городище Чирик-Рабат // Известия НАН РК. — 2008. — №1.</li>
+      <li>Қожа Ұ. Сыр бойындағы ортағасырлық қалалар тарихы. — Түркістан: Туран, 2011.</li>
+      <li>Қазақстанның киелі жерлерінің географиясы. — Астана: Фолиант, 2017.</li>
+      <li>Жалағаш аудандық тарихи-өлкетану музейінің құжаттық қоры мен архиві.</li>
+    </ol>
+  </section>
+  <footer data-i="foot">Координаттар схемалық, нақты GPS-нүктелер далалық зерттеуден кейін бекітіледі. «Жалағаш өңіріндегі ұмыт қалған тарихи орындар мен сакралды нысандарды зерттеу, цифрландыру және туристік айналымға енгізу» ғылыми жобасы, 2026.</footer>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script>
+const PAGE_URL = "https://skakovizbasar5-alt.github.io/zhalagashkoneoryndar/";
+
+const UI = {
+ kk:{eyebrow:"Қызылорда облысы · Жалағаш ауданы",title:"Жалағаш өлкетану картасы",sub:"Ұмыт қалған тарихи-сакралды нысандар: 3D орта, ғылыми анықтама және QR-тақтайшалар",
+  tRoute:"Маршрут",tReset:"Жалпы көрініс",lgSyr:"Сырдария",lgOld:"Құрғақ арна",lgRoute:"Өлкетану соқпағы",
+  period:"Дәуірі",place:"Орны",risk:"Қауіп деңгейі",riskL:["","Орташа","Жоғары","Өте жоғары"],
+  tabs:["Тарихы","Аңыз бен дерек","Сақтау шаралары"],oral:"Ауызша тарих",arch:"Археологиялық дерек",lit:"Әдебиет",
+  maps:"Google Maps-та ашу",copy:"Сілтемені көшіру",copied:"Көшірілді",onMap:"Картада көрсету",
+  rEy:"Практикалық ұсыныс 3",rH:"«Жалағаш өлкетану соқпағы»",rP:"7–11 сынып оқушыларына арналған көктемгі-күзгі танымдық-экологиялық экскурсия бағыты.",
+  eEy:"Тарихи қабаттар",eH:"Дәуірлер бойынша нысандар",eP:"Сыр өңірінің тарихи географиясы: сақ-апасиактардан Қазақ хандығы мен кеңес кезеңіне дейін.",eNote:"Шкала сызықтық емес: әр баған бір тарихи кезеңді көрсетеді.",
+  sEy:"Сауалнама · 2023–2024 оқу жылы",sH:"Тұрғындар не біледі?",sP:"Тарихи орындар туралы ақпараттану деңгейін анықтау сауалнамасы.",
+  qEy:"«QR-Тарих» жобасы",qH:"Нысан басындағы тақтайша",qP:"Әр нысанның QR-коды өзінің жеке карточкасын ашады. Тақтайша үлгісі таңдалған нысанмен бірге ауысады.",
+  lEy:"Дереккөздер",lH:"Пайдаланылған әдебиеттер",
+  foot:"Координаттар схемалық, нақты GPS-нүктелер далалық зерттеуден кейін бекітіледі. «Жалағаш өңіріндегі ұмыт қалған тарихи орындар мен сакралды нысандарды зерттеу, цифрландыру және туристік айналымға енгізу» ғылыми жобасы, 2026.",
+  plaqueK:"ЖАЛАҒАШ · ТАРИХИ ЕСКЕРТКІШ",plaqueS:"Сканерлеңіз",town:"Жалағаш",syr:"Сырдария",zhana:"Жаңадария (ескі арна)",
+  scheme:[["Сканерлеу","Смартфон камерасын тақтайшаға бағыттау"],["Нысан карточкасы","Тек осы нысанға арналған жеке бет ашылады"],["Ғылыми анықтама","Тарихы, аңыз бен дерек, сақтау шаралары"],["3D визуализация","Нысанның қайта жаңғыртылған моделі"],["Үш тіл","Қазақ, орыс, ағылшын"]],
+  kpi:[["150","респондент"],["100","оқушы"],["30","мұғалім"],["20","тұрғын"]]},
+ ru:{eyebrow:"Кызылординская область · Жалагашский район",title:"Краеведческая карта Жалагаша",sub:"Забытые историко-сакральные объекты: 3D-среда, научная справка и QR-таблички",
+  tRoute:"Маршрут",tReset:"Общий вид",lgSyr:"Сырдарья",lgOld:"Сухое русло",lgRoute:"Краеведческая тропа",
+  period:"Эпоха",place:"Место",risk:"Уровень угрозы",riskL:["","Средний","Высокий","Очень высокий"],
+  tabs:["История","Легенда и факты","Меры сохранения"],oral:"Устная история",arch:"Археологические данные",lit:"Литература",
+  maps:"Открыть в Google Maps",copy:"Копировать ссылку",copied:"Скопировано",onMap:"Показать на карте",
+  rEy:"Практическое предложение 3",rH:"«Краеведческая тропа Жалагаша»",rP:"Весенне-осенняя познавательная экскурсия для учащихся 7–11 классов.",
+  eEy:"Исторические слои",eH:"Объекты по эпохам",eP:"Историческая география Сырдарьи: от саков-апасиаков до Казахского ханства и советского периода.",eNote:"Шкала нелинейная: каждый столбец соответствует одному периоду.",
+  sEy:"Опрос · 2023–2024 учебный год",sH:"Что знают жители?",sP:"Опрос об уровне осведомлённости об исторических местах района.",
+  qEy:"Проект «QR-Тарих»",qH:"Табличка у объекта",qP:"QR-код каждого объекта открывает его отдельную карточку. Макет меняется вместе с выбранным объектом.",
+  lEy:"Источники",lH:"Литература",
+  foot:"Координаты схематичны, точные GPS-точки фиксируются после полевых работ. Научный проект «Исследование, оцифровка и включение в туризм забытых исторических мест Жалагаша», 2026.",
+  plaqueK:"ЖАЛАГАШ · ПАМЯТНИК ИСТОРИИ",plaqueS:"Сканируйте",town:"Жалагаш",syr:"Сырдарья",zhana:"Жанадарья (старое русло)",
+  scheme:[["Сканирование","Наведите камеру смартфона на табличку"],["Карточка объекта","Открывается отдельная страница этого объекта"],["Научная справка","История, легенда и факты, меры сохранения"],["3D-визуализация","Реконструированная модель объекта"],["Три языка","Казахский, русский, английский"]],
+  kpi:[["150","респондентов"],["100","учащихся"],["30","учителей"],["20","жителей"]]},
+ en:{eyebrow:"Kyzylorda Region · Zhalagash District",title:"Zhalagash Heritage Map",sub:"Forgotten historical and sacred sites: 3D scene, research notes and QR plaques",
+  tRoute:"Route",tReset:"Overview",lgSyr:"Syr Darya",lgOld:"Dry channel",lgRoute:"Heritage trail",
+  period:"Period",place:"Location",risk:"Threat level",riskL:["","Moderate","High","Very high"],
+  tabs:["History","Legend vs evidence","Conservation"],oral:"Oral history",arch:"Archaeological evidence",lit:"Literature",
+  maps:"Open in Google Maps",copy:"Copy link",copied:"Copied",onMap:"Show on map",
+  rEy:"Recommendation 3",rH:"Zhalagash Heritage Trail",rP:"A spring and autumn field trip for grades 7–11.",
+  eEy:"Historical layers",eH:"Sites by period",eP:"Historical geography of the Syr Darya: from the Saka-Apasiaks to the Kazakh Khanate and the Soviet era.",eNote:"Non-linear scale: each column is one historical period.",
+  sEy:"Survey · school year 2023–2024",sH:"What do residents know?",sP:"Survey of local awareness of the district's historical sites.",
+  qEy:"QR-Tarikh project",qH:"The plaque at the site",qP:"Each site's QR code opens its own card page. The mock-up follows the selected site.",
+  lEy:"Sources",lH:"References",
+  foot:"Coordinates are schematic; exact GPS points will be fixed after field survey. Research project on forgotten historical and sacred sites of Zhalagash, 2026.",
+  plaqueK:"ZHALAGASH · HISTORIC MONUMENT",plaqueS:"Scan me",town:"Zhalagash",syr:"Syr Darya",zhana:"Zhanadarya (old channel)",
+  scheme:[["Scan","Point a phone camera at the plaque"],["Site card","A separate page for this site opens"],["Research notes","History, legend vs evidence, conservation"],["3D view","A reconstructed model of the site"],["Three languages","Kazakh, Russian, English"]],
+  kpi:[["150","respondents"],["100","students"],["30","teachers"],["20","residents"]]}
+};
+
+const SITES = [
+ {id:"shirik",code:"ЖЛ-01",pos:[-2.1,1.0],kind:"kurgan",risk:3,era:0,
+  maps:"https://www.google.com/maps/search/?api=1&query=%D0%A8%D1%96%D1%80%D1%96%D0%BA-%D0%A0%D0%B0%D0%B1%D0%B0%D1%82+%D2%9A%D1%8B%D0%B7%D1%8B%D0%BB%D0%BE%D1%80%D0%B4%D0%B0+%D2%9A%D0%B0%D0%B7%D0%B0%D2%9B%D1%81%D1%82%D0%B0%D0%BD",
+  kk:{name:"Шірік-Рабат төбелері маңайындағы сақ обалары",short:"Шірік-Рабат обалары",period:"б.з.д. V–II ғғ.",place:"Жалағаш қалашығынан оңтүстік-батысқа қарай",state:"Жартылай тоналған, эрозияға ұшыраған",
+   hist:["Шірік-Рабат — Жаңадарияның құрғап қалған арнасы бойындағы сақ дәуірінің ірі қамалы. Ескерткішті 1940-жылдары С.П. Толстов бастаған Хорезм археологиялық-этнографиялық экспедициясы зерттеп, ғылыми айналымға енгізген. Кейін қазба жұмыстарын Ж. Құрманқұлов жалғастырды.","Қамал айналасындағы обалар — сақ-апасиак тайпаларының жерлеу орындары. Сақтар үйінді астына ақсүйектерін жерлеп, қабірге қару-жарақ, әшекей мен қыш ыдыс салған. Сондықтан обалар тайпаның әлеуметтік құрылымы мен наным-сенімін анықтайтын негізгі дерек көзі.","Шірік-Рабат ауданның ең танымал ескерткіші болса да, оның маңындағы ұсақ обалар ғылыми айналымда «көлеңкеде» қалған: олардың көбі түгенделмеген, нақты саны белгісіз."],
+   oral:"Қариялар төбелерді «ертедегі батырлар жатқан жер» деп атайды. Жаңадария мен Қуаңдария бойын жайлаған қазақ рулары көшкенде осы биік төбелерді бағдар ретінде пайдаланған.",
+   arch:"Обалардың бір бөлігінің төбесінде тонаушылар қазған шұңқырлар бар. Бұл қабірлер ертеде ашылғанын көрсетеді, бірақ үйінді құрылымы мен жерлеу ғұрпының іздері әлі де сақталған.",
+   verdict:"Аңыздағы «батырлар қорымы» ұғымы археологиялық деректегі ақсүйектер жерлеуімен сәйкес келеді.",
+   protect:["Обаларды түгендеп, әрқайсысына GPS-координата мен паспорт беру","Дронмен аэрофотосурет түсіріп, үйінділердің 3D-моделін (фотограмметрия) жасау","Тонау шұңқырларын бекітіп, жел эрозиясына қарсы өсімдік жамылғысын қалпына келтіру","Обалар тобының шекарасына қорғау белгілері мен QR-тақтайша орнату"]},
+  ru:{name:"Сакские курганы у холмов Шірік-Рабат",short:"Курганы Шірік-Рабат",period:"V–II вв. до н.э.",place:"к юго-западу от пос. Жалагаш",state:"Частично разграблены, подвержены эрозии",
+   hist:["Шірік-Рабат (Чирик-Рабат) — крупная сакская крепость на сухом русле Жанадарьи. Памятник ввела в научный оборот Хорезмская археолого-этнографическая экспедиция С.П. Толстова в 1940-х годах; позднее раскопки продолжил Ж. Курманкулов.","Курганы вокруг крепости — погребения саков-апасиаков. Под насыпями хоронили знать с оружием, украшениями и керамикой, поэтому курганы — главный источник о социальном строе и верованиях племён.","Мелкие курганы остаются в тени самой крепости: многие не учтены, их точное число неизвестно."],
+   oral:"Старожилы называют холмы «местом, где лежат древние батыры». Казахские роды при кочёвках использовали высокие курганы как ориентиры.",
+   arch:"На вершинах части курганов видны грабительские воронки: погребения вскрывались ещё в древности, но структура насыпей и следы обряда сохранились.",
+   verdict:"Представление о «кладбище батыров» совпадает с археологическими данными о погребениях знати.",
+   protect:["Учесть курганы, присвоить каждому GPS-координаты и паспорт","Провести аэрофотосъёмку дроном и создать 3D-модели насыпей","Укрепить грабительские воронки, восстановить растительный покров против ветровой эрозии","Установить охранные знаки и QR-табличку на границе группы"]},
+  en:{name:"Saka burial mounds near Shirik-Rabat",short:"Shirik-Rabat mounds",period:"5th–2nd c. BC",place:"south-west of Zhalagash",state:"Partly looted, eroding",
+   hist:["Shirik-Rabat (Chirik-Rabat) is a large Saka fortress on the dry Zhanadarya channel. S.P. Tolstov's Khorezm expedition brought it into scholarship in the 1940s; Zh. Kurmankulov later continued the excavations.","The mounds around the fortress are burials of the Saka-Apasiak tribes. Nobles were buried under the earthworks with weapons, ornaments and pottery, which makes the mounds the main evidence for their society and beliefs.","The smaller mounds sit in the fortress's shadow: many have never been recorded and their exact number is unknown."],
+   oral:"Elders call the mounds the place where ancient heroes lie. Kazakh clans on seasonal migration used the tall mounds as landmarks.",
+   arch:"Looters' pits on top of several mounds show the graves were opened long ago, but the mound structure and traces of the burial rite survive.",
+   verdict:"The 'heroes' cemetery' of legend matches the archaeological evidence of elite burials.",
+   protect:["Record every mound with GPS coordinates and a site passport","Drone survey and photogrammetric 3D models of the mounds","Stabilise looters' pits and restore vegetation against wind erosion","Place protective markers and a QR plaque at the group's boundary"]}},
+ {id:"mopshe",code:"ЖЛ-02",pos:[0.7,1.05],kind:"tepe",risk:2,era:1,
+  maps:"https://www.google.com/maps/search/?api=1&query=%D0%9C%D3%A9%D0%BF%D1%88%D0%B5+%D1%82%D3%A9%D0%B1%D0%B5+%D0%96%D0%B0%D0%BB%D0%B0%D2%93%D0%B0%D1%88+%D2%9A%D0%B0%D0%B7%D0%B0%D2%9B%D1%81%D1%82%D0%B0%D0%BD",
+  kk:{name:"Мөпше төбе қонысы",short:"Мөпше төбе",period:"VII–X ғғ. (Оғыз кезеңі)",place:"Ескі Жаңадария арнасы бойында",state:"Беткі қабаты мүжілген, қыш сынықтары шашылған",
+   hist:["Мөпше төбе — Жаңадарияның құрғап қалған арнасы бойындағы бекіністі қоныс. Мұндай төбелерде сақ және ортағасырлық қыш қалдықтары кездеседі; тұрғындары егіншілікпен де, мал шаруашылығымен де айналысқан.","VII–X ғасырларда Сырдың төменгі ағысы Оғыз мемлекетінің өзегі болды, ал оның астанасы Жанкент те осы өңірде орналасқан. Мөпше төбе сияқты қоныстар қала мен дала арасындағы сауда мен суармалы егіншілік желісінің бөлігі болған.","Қоныс маңынан ауданда сирек ұшырасатын көне Қожаназар қонысы да белгілі; екеуі бір арна бойындағы қоныстар тізбегін құрайды."],
+   oral:"Жергілікті қариялар Мөпше төбе маңын «Көне қаланың жұрты, бұл жерде Жібек жолының керуендері тоқтаған» деп сипаттайды.",
+   arch:"Археологтар бұл аймақтан X–XII ғасырларға жататын суармалы егіншілік каналдарының іздерін және штампталған араб жазуы бар қыш ыдыс сынықтарын тапқан. Бұл сауда мен қолөнердің дамығанын растайды.",
+   verdict:"Аңызда тарихи шындықтың өзегі бар: Мөпше төбе жай «төбе» емес, ортағасырлық қалалық мәдениет пен сауда инфрақұрылымының нысаны.",
+   protect:["Беткі қабаттағы қыш сынықтарын тіркеп, аудандық музейге жинау (жоспарлы барлау арқылы)","Ескі арна мен каналдардың ізін спутниктік түсірілім мен GIS-карта арқылы белгілеу","Төбені жайылым мен көлік жолынан қоршау","Оқушыларға арналған «Жас өлкетанушы» далалық сабақтарын осы нысанда өткізу"]},
+  ru:{name:"Поселение Мөпше төбе",short:"Мөпше төбе",period:"VII–X вв. (огузский период)",place:"вдоль старого русла Жанадарьи",state:"Верхний слой разрушен, разбросаны черепки",
+   hist:["Мөпше төбе — укреплённое поселение на сухом русле Жанадарьи. На таких холмах встречается сакская и средневековая керамика; жители занимались и земледелием, и скотоводством.","В VII–X вв. низовья Сырдарьи были ядром государства огузов, их столица Янгикент (Жанкент) находилась в этом же регионе. Такие поселения входили в сеть торговли и орошаемого земледелия между городом и степью.","Рядом известно и поселение Ескі Қожаназар; оба составляют цепочку поселений вдоль одного русла."],
+   oral:"Старожилы называют Мөпше төбе «городищем древнего города, где останавливались караваны Шёлкового пути».",
+   arch:"Археологи нашли здесь следы оросительных каналов X–XII вв. и обломки керамики со штампованной арабской надписью, что подтверждает развитие торговли и ремёсел.",
+   verdict:"В легенде есть историческое ядро: это не просто холм, а объект средневековой городской культуры и торговой инфраструктуры.",
+   protect:["Зафиксировать подъёмный материал и передать в районный музей","Отметить русла и каналы по космоснимкам на GIS-карте","Оградить холм от выпаса и автодорог","Проводить здесь полевые занятия клуба «Юный краевед»"]},
+  en:{name:"Mopshe Tobe settlement",short:"Mopshe Tobe",period:"7th–10th c. (Oghuz period)",place:"on the old Zhanadarya channel",state:"Surface worn, pottery scattered",
+   hist:["Mopshe Tobe is a fortified settlement on the dry Zhanadarya channel. Saka and medieval pottery is found on such mounds; their people both farmed and herded.","In the 7th–10th centuries the lower Syr Darya was the core of the Oghuz state, whose capital Yangikent (Zhankent) lay in the same region. Settlements like this were part of a network of trade and irrigated farming between town and steppe.","The nearby Eski Kozhanazar settlement forms a chain of sites with it along the same channel."],
+   oral:"Local elders describe Mopshe Tobe as the ruins of an old town where Silk Road caravans stopped.",
+   arch:"Archaeologists found traces of 10th–12th century irrigation canals and pottery stamped with Arabic script, confirming trade and crafts.",
+   verdict:"The legend has a historical core: this is not just a mound but part of medieval urban culture and trade infrastructure.",
+   protect:["Record surface finds and deposit them in the district museum","Map old channels and canals from satellite imagery in GIS","Fence the mound off from grazing and vehicle tracks","Hold Young Local Historian field lessons here"]}},
+ {id:"kushikbai",code:"ЖЛ-03",pos:[3.3,3.2],kind:"mazar",risk:3,era:3,
+  maps:"https://www.google.com/maps/search/?api=1&query=%D0%95%D1%81%D0%BA%D1%96+%D0%9A%D2%AF%D1%88%D1%96%D0%BA%D0%B1%D0%B0%D0%B9+%D2%9B%D0%BE%D1%80%D1%8B%D0%BC%D1%8B+%D0%96%D0%B0%D0%BB%D0%B0%D2%93%D0%B0%D1%88+%D2%9A%D0%B0%D0%B7%D0%B0%D2%9B%D1%81%D1%82%D0%B0%D0%BD",
+  kk:{name:"Ескі Күшікбай қорымы мен мазары",short:"Күшікбай мазары",period:"XIX ғ. аяғы",place:"Жалағаш ауданының шөлді аймағы",state:"Шикі кірпіштен соғылған, күмбездері құлаған",
+   hist:["Мыңбұлақ пен Күшікбай маңайындағы ескі қорымдар мен кесене орындары XIX ғасырдың аяғы мен XX ғасырдың басында тұрғызылған. Құрылыстар шикі кірпіштен қаланып, күмбезбен жабылған — бұл Сыр бойы қазақтарының жерлеу сәулетіне тән белгі.","Мазарлар көшпелі және жартылай отырықшы қазақ ауылдарының қыстауларына жақын салынған: рудың қорымы атамекеннің белгісі болып, жер иелігін де айғақтаған.","Қазір құрылыстардың көбі судың тартылуы мен жел эрозиясы салдарынан мүжіліп, төбешіктерге айналған."],
+   oral:"Халық арасында мазарлардың атауы белгілі бір тұлғалармен (батыр, би, ишан) байланыстырылады. Жаңадария мен Қуаңдария бойындағы рулар (Шөмекей, Төртқара, Кете, т.б.) қыстауға көшкенде осы мазарларды бағдар еткен.",
+   arch:"Шикі кірпіш жауын-шашын мен желге төзімсіз: күмбездер құлап, қабырғалар үйіндіге айналған. Мұндай нысандар толық сақталмауы мүмкін, сондықтан оларды цифрлық тіркеу ең тиімді жол.",
+   verdict:"Ауызша шежіре мазардың кімге арналғанын, ал сәулет қалдықтары оның салыну мерзімі мен техникасын анықтауға көмектеседі.",
+   protect:["Әр мазарды өлшеп-сызып, 3D-сканерлеу (Digital Preservation)","Мазар иелері туралы шежіре мен естеліктерді қариялардан жазып алу","Құлау қаупі бар қабырғаларды уақытша бекіту","Қорымды қоршап, ақпараттық QR-тақтайша орнату"]},
+  ru:{name:"Старое кладбище и мазар Күшікбай",short:"Мазар Күшікбай",period:"конец XIX в.",place:"пустынная зона района",state:"Сырцовый кирпич, купола обрушены",
+   hist:["Старые кладбища и мавзолеи у Мыңбұлақ и Күшікбай построены в конце XIX – начале XX вв. из сырцового кирпича и перекрыты куполами — характерная черта погребальной архитектуры казахов Сырдарьи.","Мазары ставили рядом с зимовками: родовое кладбище обозначало родовые земли.","Сейчас многие постройки из-за отступления воды и ветровой эрозии превратились в холмики."],
+   oral:"В народе названия мазаров связывают с конкретными людьми (батыры, бии, ишаны). Роды Шөмекей, Төртқара, Кете и др. при откочёвке на зимовки ориентировались по ним.",
+   arch:"Сырцовый кирпич не выдерживает осадков и ветра: купола обрушились, стены оплыли. Такие объекты могут не сохраниться, поэтому их цифровая фиксация наиболее эффективна.",
+   verdict:"Устная шежире помогает установить, кому посвящён мазар, а остатки постройки — время и технику строительства.",
+   protect:["Обмеры и 3D-сканирование каждого мазара","Записать у старожилов шежире и воспоминания","Временно укрепить стены с угрозой обрушения","Оградить кладбище и установить QR-табличку"]},
+  en:{name:"Old Kushikbai cemetery and mausoleum",short:"Kushikbai mazar",period:"late 19th c.",place:"desert zone of the district",state:"Mud-brick, domes collapsed",
+   hist:["The old cemeteries and mausoleums near Mynbulak and Kushikbai were built in the late 19th and early 20th centuries from mud brick under domes, typical of Syr Darya Kazakh funerary architecture.","Mausoleums stood near winter camps: a clan cemetery marked ancestral land.","Retreating water and wind erosion have reduced many of them to low mounds."],
+   oral:"Local tradition links each mausoleum to a named person (a batyr, bi or ishan). Clans such as Shomekei, Tortkara and Kete used them as landmarks when moving to winter camps.",
+   arch:"Mud brick does not withstand rain and wind: domes have fallen and walls have slumped. These monuments may not survive, so digital recording is the most effective protection.",
+   verdict:"Oral genealogy tells us whom a mausoleum honours; the remains tell us when and how it was built.",
+   protect:["Measured drawings and 3D scanning of each mausoleum","Record genealogies and memories from elders","Temporarily prop walls at risk of collapse","Fence the cemetery and install a QR plaque"]}},
+ {id:"kalkai",code:"ЖЛ-04",pos:[-4.4,-1.6],kind:"madrasa",risk:2,era:3,
+  maps:"https://www.google.com/maps/search/?api=1&query=%D2%9A%D0%B0%D0%BB%D2%9B%D0%B0%D0%B9+%D0%B8%D1%88%D0%B0%D0%BD+%D0%BA%D0%B5%D1%81%D0%B5%D0%BD%D0%B5%D1%81%D1%96+%D2%9A%D0%B0%D1%80%D0%BC%D0%B0%D2%9B%D1%88%D1%8B+%D2%9A%D0%B0%D0%B7%D0%B0%D2%9B%D1%81%D1%82%D0%B0%D0%BD",
+  kk:{name:"Қалқай ишан кесенесі мен медресе орны",short:"Қалқай ишан",period:"XIX ғ.",place:"Аудандар шекарасы маңайы (Қармақшы жағы)",state:"Қалпына келтіруді және қорғауды қажет етеді",
+   hist:["XIX ғасырда Сыр бойында ишандар — дін ғұламалары мен ұстаздар — медресе-мешіттер ашып, ауыл балаларын сауаттандырды. Мұндай орталықтар тек діни емес, рухани-ағартушылық та қызмет атқарды.","Қалқай ишан медресесі де өңірдегі осындай ошақтардың бірі болған. Ишан қайтыс болған соң оның басына кесене тұрғызылып, ол халық зиярат ететін киелі орынға айналды.","Кеңестік ұжымдастыру мен атеистік саясат жылдары медресе қиратылып немесе басқа мақсатта пайдаланылып, кейін қараусыз қалды."],
+   oral:"Ел арасында ишанның шәкірттері, ағартушылық қызметі туралы әңгімелер сақталған. Кесене бүгін де зиярат орны ретінде құрметтеледі.",
+   arch:"Медресенің іргетасы мен қабырға қалдықтары жер бетінен байқалады. Нысанның жоспары мен құрылыс кезеңдері әлі арнайы зерттелмеген.",
+   verdict:"Кеңес кезеңінде өшірілген рухани-ағартушылық тарихты ауызша естеліктер мен архив құжаттары арқылы қалпына келтіруге болады.",
+   protect:["Медресенің іргетасын тазалап, өлшеп-сызу және жоспарын жасау","Аудандық және облыстық архивтен 1920–1930 жж. құжаттарды іздеу","Кесенені жергілікті маңызы бар ескерткіштер тізіміне енгізуді ұсыну","Зиярат етушілерге арналған ақпараттық QR-тақтайша орнату"]},
+  ru:{name:"Мавзолей Калкай ишана и место медресе",short:"Калкай ишан",period:"XIX в.",place:"у границы районов (в сторону Кармакшы)",state:"Требует восстановления и охраны",
+   hist:["В XIX в. ишаны на Сырдарье — богословы и наставники — открывали медресе-мечети и обучали грамоте детей аулов. Это были духовно-просветительские центры.","Медресе Калкай ишана было одним из таких очагов. Над могилой ишана возвели мавзолей, ставший местом паломничества.","В годы коллективизации и атеистической политики медресе разрушили или перепрофилировали, затем оно было заброшено."],
+   oral:"В народе сохранились рассказы об учениках ишана и его просветительской деятельности. Мавзолей и сегодня почитается как место зиярата.",
+   arch:"Остатки фундамента и стен медресе видны на поверхности. План и строительные периоды объекта специально не изучались.",
+   verdict:"Стёртую в советское время историю просвещения можно восстановить по устным воспоминаниям и архивам.",
+   protect:["Расчистить и обмерить фундамент медресе, составить план","Искать документы 1920–1930-х гг. в районном и областном архивах","Предложить включить мавзолей в список памятников местного значения","Установить информационную QR-табличку для паломников"]},
+  en:{name:"Kalkai Ishan mausoleum and madrasa site",short:"Kalkai Ishan",period:"19th c.",place:"near the district border (towards Karmakshy)",state:"Needs restoration and protection",
+   hist:["In the 19th century ishans on the Syr Darya, religious scholars and teachers, opened madrasa-mosques and taught village children to read and write. These were centres of learning as well as worship.","Kalkai Ishan's madrasa was one of them. A mausoleum was built over the ishan's grave and became a place of pilgrimage.","During Soviet collectivisation and anti-religious campaigns the madrasa was destroyed or repurposed, then abandoned."],
+   oral:"Stories about the ishan's students and teaching survive locally. The mausoleum is still respected as a place of ziyarat.",
+   arch:"Foundations and wall remains of the madrasa are visible on the surface. Its plan and building phases have not been studied.",
+   verdict:"A history of learning erased in the Soviet period can be rebuilt from oral memory and archives.",
+   protect:["Clear and measure the madrasa foundations, draw its plan","Search district and regional archives for 1920s–30s documents","Propose listing the mausoleum as a local monument","Install an information QR plaque for pilgrims"]}}
+];
+
+const ERAS = {
+ kk:[["б.з.д. I мыңжылдық","Сақ-апасиактар","Қамалдар мен обалар, Жаңадария арнасы бойындағы өркениет"],["VII–XII ғғ.","Оғыз-қыпшақ дәуірі","Сыр бойы қалалары, суармалы егіншілік, Жібек жолы"],["XV–XVIII ғғ.","Қазақ хандығы","Көшпелі рулардың жайлау мен қыстау жолдары"],["XIX – XX ғ. басы","Ишандар мен мазарлар","Шикі кірпішті кесенелер, медресе-мешіттер"]],
+ ru:[["I тыс. до н.э.","Саки-апасиаки","Крепости и курганы, цивилизация русла Жанадарьи"],["VII–XII вв.","Огузо-кыпчакская эпоха","Города Сырдарьи, орошение, Шёлковый путь"],["XV–XVIII вв.","Казахское ханство","Пути кочёвок между жайлау и кыстау"],["XIX – нач. XX в.","Ишаны и мазары","Сырцовые мавзолеи, медресе-мечети"]],
+ en:[["1st mill. BC","Saka-Apasiaks","Fortresses and mounds along the Zhanadarya"],["7th–12th c.","Oghuz-Kipchak era","Syr Darya towns, irrigation, Silk Road"],["15th–18th c.","Kazakh Khanate","Seasonal migration routes"],["19th – early 20th c.","Ishans and mausoleums","Mud-brick mausoleums, madrasas"]]
+};
+
+const SURVEY = {
+ kk:[["Шірік-Рабаттан басқа қандай тарихи орындарды білесіз?",[["Тек Шірік-Рабатты білемін",58],["Бұқарбай батыр кесенесі мен 1–2 танымал нысанды",27],["Ұмыт қалған төбелер мен мазарлар туралы хабарым бар",15]],2],
+     ["Өлкетанулық экскурсияға қатыстыңыз ба?",[["Иә, қатыстым",18],["Жоқ, бірақ қатысқым келеді",68],["Қызығушылығым жоқ",14]],1],
+     ["QR-кодтар мен интерактивті карта жасалса, пайдаланар ма едіңіз?",[["Өте пайдалы, міндетті түрде қолданамын",84],["Мүмкін қолданармын",12],["Қажеті жоқ",4]],0],
+     ["Мектепте өлкетану үйірмелері мен соқпақтарын ашуды қолдайсыз ба?",[["Толық қолдаймын",91],["Қолдамаймын / жауап беруге қиналамын",9]],0]],
+ ru:[["Какие исторические места, кроме Шірік-Рабата, вы знаете?",[["Знаю только Шірік-Рабат",58],["Мавзолей Бухарбай батыра и 1–2 известных объекта",27],["Слышал о забытых холмах и мазарах",15]],2],
+     ["Участвовали ли вы в краеведческой экскурсии?",[["Да, участвовал",18],["Нет, но хочу",68],["Не интересно",14]],1],
+     ["Пользовались бы вы QR-кодами и интерактивной картой?",[["Очень полезно, обязательно",84],["Возможно",12],["Не нужно",4]],0],
+     ["Поддерживаете ли краеведческие кружки и тропы в школе?",[["Полностью поддерживаю",91],["Нет / затрудняюсь ответить",9]],0]],
+ en:[["Which historical sites besides Shirik-Rabat do you know?",[["Only Shirik-Rabat",58],["Bukharbai Batyr mausoleum and 1–2 known sites",27],["I know of forgotten mounds and mausoleums",15]],2],
+     ["Have you joined a local history field trip?",[["Yes",18],["No, but I would like to",68],["Not interested",14]],1],
+     ["Would you use QR codes and an interactive map?",[["Very useful, definitely",84],["Maybe",12],["Not needed",4]],0],
+     ["Do you support school heritage clubs and trails?",[["Fully support",91],["No / hard to say",9]],0]]
+};
+
+const ROUTE = {order:["town","mopshe","shirik","kushikbai"],
+ kk:{town:["Жалағаш кенті","Аудандық өлкетану музейі, жиналу орны"],mopshe:["Мөпше төбе","Оғыз дәуірі қонысы, қыш сынықтарын бақылау"],shirik:["Шірік-Рабат","Сақ қамалы мен обалар тобы"],kushikbai:["Күшікбай","XIX ғ. мазарлары, шежіре жинау"]},
+ ru:{town:["Пос. Жалагаш","Районный музей, место сбора"],mopshe:["Мөпше төбе","Огузское поселение, наблюдение керамики"],shirik:["Шірік-Рабат","Сакская крепость и курганы"],kushikbai:["Күшікбай","Мазары XIX в., сбор шежире"]},
+ en:{town:["Zhalagash","District museum, meeting point"],mopshe:["Mopshe Tobe","Oghuz settlement, surface pottery"],shirik:["Shirik-Rabat","Saka fortress and mounds"],kushikbai:["Kushikbai","19th-century mausoleums, oral history"]}};
+
+let lang="kk",cur=0,tab=0;
+const $=s=>document.querySelector(s);
+const CARD={shirik:"https://skakovizbasar5-alt.github.io/zhalagashkoneoryndar/cards/shirik.html",mopshe:"https://skakovizbasar5-alt.github.io/zhalagashkoneoryndar/cards/mopshe.html",kushikbai:"https://skakovizbasar5-alt.github.io/zhalagashkoneoryndar/cards/kushikbai.html",kalkai:"https://skakovizbasar5-alt.github.io/zhalagashkoneoryndar/cards/kalkai.html"};
+const link=s=>CARD[s.id];
+const esc=t=>String(t);
+
+function renderList(){
+  $("#list").innerHTML=SITES.map((s,i)=>`<button class="site" id="site-${s.id}" data-i="${i}" aria-current="${i===cur}">
+    <span class="n">${s.code}</span><span><span class="t">${s[lang].short}</span><br><span class="d">${s[lang].period}</span></span></button>`).join("");
+  $("#list").querySelectorAll(".site").forEach(b=>b.onclick=()=>select(+b.dataset.i,true));
+}
+function renderCard(){
+  const s=SITES[cur],t=s[lang],u=UI[lang];
+  const risk=`<div class="risk">${[1,2,3].map(k=>`<span class="${k<=s.risk?"f":""}"></span>`).join("")}</div>`;
+  let body="";
+  if(tab===0) body=t.hist.map(p=>`<p>${p}</p>`).join("");
+  if(tab===1) body=`<div class="compare"><div class="src oral"><h4>${u.oral}</h4><p>${t.oral}</p></div><div class="src arch"><h4>${u.arch}</h4><p>${t.arch}</p></div></div><div class="verdict">${t.verdict}</div>`;
+  if(tab===2) body=`<ul>${t.protect.map(p=>`<li>${p}</li>`).join("")}</ul>`;
+  $("#card").innerHTML=`<div class="card-h"><div class="eyebrow">${s.code}</div><h2>${t.name}</h2></div>
+   <dl class="facts" style="margin:0"><div class="fact"><dt>${u.period}</dt><dd>${t.period}</dd></div><div class="fact"><dt>${u.place}</dt><dd>${t.place}</dd></div>
+   <div class="fact"><dt>${u.risk}: ${u.riskL[s.risk]}</dt><dd>${t.state}</dd>${risk}</div></dl>
+   <div class="tabs" role="tablist">${u.tabs.map((n,i)=>`<button class="tab" role="tab" id="tab-${i}" aria-selected="${i===tab}" data-t="${i}">${n}</button>`).join("")}</div>
+   <div class="tabpanel" role="tabpanel">${body}
+    <div class="actions"><a class="btn" href="${s.maps}" target="_blank" rel="noopener">${u.maps} ↗</a><button class="btn ghost" id="copybtn">${u.copy}</button></div></div>`;
+  $("#card").querySelectorAll(".tab").forEach(b=>b.onclick=()=>{tab=+b.dataset.t;renderCard();});
+  $("#copybtn").onclick=async e=>{const b=e.currentTarget;try{await navigator.clipboard.writeText(link(s));b.textContent=u.copied}catch(_){b.textContent=link(s)}};
+  renderPlaque();
+}
+function renderPlaque(){
+  const s=SITES[cur],u=UI[lang];
+  $("#plaque").innerHTML=`<div class="pk">${u.plaqueK}</div><h3>${s.kk.name}</h3><div class="pp">${s.code} · ${s.kk.period}</div><div class="qr" id="qr"></div><div class="pl"><span>ҚАЗ</span><span>РУС</span><span>ENG</span><span>· ${u.plaqueS}</span></div>`;
+  try{new QRCode($("#qr"),{text:link(s),width:340,height:340,colorDark:"#1a1410",colorLight:"#ffffff",correctLevel:QRCode.CorrectLevel.M});}catch(e){}
+}
+function renderStatic(){
+  const u=UI[lang];
+  $("#scheme").innerHTML=u.scheme.map((r,i)=>`<div class="sc"><span class="n">${i+1}</span><div><b>${r[0]}</b><span>${r[1]}</span></div></div>`).join("");
+  $("#kpi").innerHTML=u.kpi.map(k=>`<span><b>${k[0]}</b> ${k[1]}</span>`).join("");
+  $("#survey").innerHTML=SURVEY[lang].map(([q,a,top])=>`<div class="q"><h3>${q}</h3>${a.map(([l,v],i)=>`<div class="bar ${i===top?"top":""}"><span>${l}</span><b>${v}%</b><div class="tr"><i style="width:${v}%"></i></div></div>`).join("")}</div>`).join("");
+  $("#routeList").innerHTML=ROUTE.order.map((k,i)=>{const r=ROUTE[lang][k],si=SITES.findIndex(s=>s.id===k);
+    return `<div class="stop"><div class="k">${String(i+1).padStart(2,"0")}</div><div class="s">${r[0]}</div><div class="x">${r[1]}</div>${si>=0?`<button data-s="${si}">${u.onMap} →</button>`:""}</div>`}).join("");
+  $("#routeList").querySelectorAll("button").forEach(b=>b.onclick=()=>{select(+b.dataset.s,true);stage.scrollIntoView({behavior:"smooth"})});
+  $("#eraRow").innerHTML=ERAS[lang].map((e,i)=>`<div class="era"><div class="k">${e[0]}</div><h3>${e[1]}</h3><div class="x">${e[2]}</div>
+    ${SITES.map((s,j)=>s.era===i?`<button class="pin" data-s="${j}">${s.code} · ${s[lang].short}</button>`:"").join("")}</div>`).join("");
+  $("#eraRow").querySelectorAll(".pin").forEach(b=>b.onclick=()=>{select(+b.dataset.s,true);stage.scrollIntoView({behavior:"smooth"})});
+}
+function setLang(l){
+  lang=l;document.documentElement.lang=l;
+  document.querySelectorAll(".lang button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.l===l));
+  document.querySelectorAll("[data-i]").forEach(el=>{const k=el.dataset.i;if(typeof UI[l][k]==="string")el.textContent=UI[l][k];});
+  renderList();renderCard();renderStatic();
+  labels.forEach((el,i)=>el.querySelector("span").textContent=SITES[i][lang].short);
+  geoLabels.forEach(g=>g.el.textContent=UI[lang][g.key]);
+  try{localStorage.setItem("zh-lang",l)}catch(e){}
+}
+document.querySelectorAll(".lang button").forEach(b=>b.onclick=()=>setLang(b.dataset.l));
+
+/* ---------- 3D ---------- */
+const canvas=$("#c"),stage=$("#stage");
+const renderer=new THREE.WebGLRenderer({canvas,antialias:true});
+renderer.setPixelRatio(Math.min(devicePixelRatio,2));renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+const scene=new THREE.Scene();
+const camera=new THREE.PerspectiveCamera(42,1,0.1,200);
+const HOME={pos:new THREE.Vector3(0,9.5,10.5),tgt:new THREE.Vector3(0,0,0.4)};
+camera.position.copy(HOME.pos);
+const controls=new THREE.OrbitControls(camera,canvas);
+controls.enableDamping=true;controls.maxPolarAngle=1.32;controls.minDistance=3;controls.maxDistance=20;controls.enablePan=false;controls.target.copy(HOME.tgt);
+
+const css=v=>getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+function applyTheme(){const c=new THREE.Color(css("--sky"));scene.background=c;scene.fog=new THREE.Fog(c,16,32);}
+applyTheme();matchMedia("(prefers-color-scheme: dark)").addEventListener("change",applyTheme);
+new MutationObserver(applyTheme).observe(document.documentElement,{attributes:true,attributeFilter:["data-theme"]});
+
+scene.add(new THREE.HemisphereLight(0xfff3df,0x6a5841,0.72));
+const sun=new THREE.DirectionalLight(0xffdcae,0.95);sun.position.set(-7,11,5);sun.castShadow=true;
+sun.shadow.mapSize.set(2048,2048);Object.assign(sun.shadow.camera,{left:-10,right:10,top:10,bottom:-10});scene.add(sun);
+
+const V=a=>a.map(p=>new THREE.Vector3(p[0],0,p[1]));
+const syr=new THREE.CatmullRomCurve3(V([[-10,-3.9],[-6,-3.4],[-3,-3.0],[0,-3.5],[3,-3.0],[6,-3.7],[10,-3.2]]));
+const zhana=new THREE.CatmullRomCurve3(V([[-10,2.9],[-6,2.5],[-3.4,2.0],[-1,1.5],[0.8,1.55],[3,2.1],[6,1.6],[10,2.3]]));
+const inkar=new THREE.CatmullRomCurve3(V([[-10,5.6],[-5,5.1],[0,5.6],[5,5.0],[10,5.5]]));
+const SP=[syr,zhana,inkar].map(c=>c.getSpacedPoints(160));
+function dist(pts,x,z){let m=1e9;for(const p of pts){const d=(p.x-x)**2+(p.z-z)**2;if(d<m)m=d;}return Math.sqrt(m);}
+
+const N=140,G=new THREE.PlaneGeometry(20,20,N,N);G.rotateX(-Math.PI/2);
+const pos=G.attributes.position,cols=[];
+const sand=new THREE.Color(0xdcc496),dune=new THREE.Color(0xc4a271),green=new THREE.Color(0x8e9b5c),salt=new THREE.Color(0xece5d2),takyr=new THREE.Color(0xcdb79a);
+for(let i=0;i<pos.count;i++){
+  const x=pos.getX(i),z=pos.getZ(i);
+  let h=0.16*Math.sin(x*1.2+z*0.5)*Math.cos(z*1.05)+0.07*Math.sin(x*3.1-z*2.2)+0.035*Math.sin(x*7+z*6);
+  if(z>3) h+=0.12*Math.max(0,Math.sin(x*2.2+z*0.6)); // dunes in the south
+  const dS=dist(SP[0],x,z),dZ=dist(SP[1],x,z),dI=dist(SP[2],x,z);
+  if(dS<0.7)h-=0.28*(1-dS/0.7);
+  if(dZ<0.45)h-=0.12*(1-dZ/0.45);
+  if(dI<0.35)h-=0.08*(1-dI/0.35);
+  pos.setY(i,h);
+  let c=sand.clone().lerp(dune,Math.max(0,Math.min(1,0.45+h*2.2)));
+  if(z>3.2)c.lerp(takyr,0.25);
+  if(dS<1.6)c.lerp(green,(1-dS/1.6)*0.85);
+  if(dZ<0.55)c.lerp(salt,(1-dZ/0.55)*0.75);
+  if(dI<0.4)c.lerp(salt,(1-dI/0.4)*0.6);
+  cols.push(c.r,c.g,c.b);
+}
+G.setAttribute("color",new THREE.Float32BufferAttribute(cols,3));G.computeVertexNormals();
+const ground=new THREE.Mesh(G,new THREE.MeshLambertMaterial({vertexColors:true}));ground.receiveShadow=true;scene.add(ground);
+// survey grid
+const grid=new THREE.GridHelper(20,20,0x7a6650,0x7a6650);grid.material.transparent=true;grid.material.opacity=0.12;grid.position.y=0.25;scene.add(grid);
+const water=new THREE.Mesh(new THREE.TubeGeometry(syr,240,0.26,6),new THREE.MeshPhongMaterial({color:0x3f8f9a,shininess:90}));
+water.scale.y=0.12;water.position.y=-0.05;scene.add(water);
+
+const rc=new THREE.Raycaster();
+function hAt(x,z){rc.set(new THREE.Vector3(x,5,z),new THREE.Vector3(0,-1,0));const h=rc.intersectObject(ground);return h.length?h[0].point.y:0;}
+
+const M=c=>new THREE.MeshLambertMaterial({color:c});
+const brick=M(0xc9a271),brickD=M(0x9c784e),earth=M(0xb38b5b),tile=M(0x2e8c86),plaster=M(0xe7dcc8);
+const box=(w,h,d,m)=>new THREE.Mesh(new THREE.BoxGeometry(w,h,d),m);
+function build(kind){
+  const g=new THREE.Group();
+  if(kind==="kurgan"){
+    [[0,0,0.55],[0.95,0.45,0.4],[-0.75,0.6,0.34],[0.35,-0.85,0.3],[-0.5,-0.55,0.24]].forEach(([x,z,r])=>{
+      const m=new THREE.Mesh(new THREE.SphereGeometry(r,24,10,0,Math.PI*2,0,Math.PI/2),earth);m.scale.y=0.5;m.position.set(x,0,z);g.add(m);
+      const pit=new THREE.Mesh(new THREE.CylinderGeometry(r*0.26,r*0.12,0.06,12),brickD);pit.position.set(x,r*0.47,z);g.add(pit);
+    });
+  }else if(kind==="tepe"){
+    const m=new THREE.Mesh(new THREE.CylinderGeometry(0.8,1.15,0.45,9),earth);m.position.y=0.22;g.add(m);
+    for(let i=0;i<6;i++){const a=i/6*Math.PI*2,w=box(0.32,0.2+0.08*(i%2),0.07,brick);w.position.set(Math.cos(a)*0.6,0.54,Math.sin(a)*0.6);w.rotation.y=-a+Math.PI/2;g.add(w);}
+    for(let i=0;i<7;i++){const s=box(0.08,0.02,0.06,i%2?tile:brickD);s.position.set(Math.random()-0.5,0.46,Math.random()-0.5);s.rotation.y=Math.random()*3;g.add(s);}
+    const canal=new THREE.Mesh(new THREE.TorusGeometry(1.6,0.04,4,40,Math.PI*0.9),plaster);canal.rotation.x=Math.PI/2;canal.position.y=0.02;g.add(canal);
+  }else if(kind==="mazar"){
+    const base=box(0.8,0.55,0.8,brick);base.position.y=0.27;g.add(base);
+    const drum=new THREE.Mesh(new THREE.CylinderGeometry(0.36,0.38,0.15,18),brick);drum.position.y=0.62;g.add(drum);
+    const dome=new THREE.Mesh(new THREE.SphereGeometry(0.36,18,8,0,Math.PI*1.25,0,Math.PI/2),brickD);dome.position.y=0.69;g.add(dome);
+    const portal=box(0.32,0.62,0.12,brick);portal.position.set(0,0.31,0.44);g.add(portal);
+    const arch=box(0.16,0.36,0.04,brickD);arch.position.set(0,0.2,0.51);g.add(arch);
+    [[1.0,0.35],[-0.95,0.55],[0.75,-0.95],[-0.6,-0.85],[1.2,-0.3]].forEach(([x,z],i)=>{const s=new THREE.Mesh(new THREE.SphereGeometry(0.18,10,6,0,Math.PI*2,0,Math.PI/2),earth);s.scale.y=0.5;s.position.set(x,0,z);g.add(s);if(i%2){const t=box(0.05,0.22,0.02,brickD);t.position.set(x,0.12,z);g.add(t);}});
+  }else{
+    const court=box(1.7,0.32,1.3,brick);court.position.y=0.16;g.add(court);
+    const hole=box(1.3,0.34,0.9,earth);hole.position.y=0.17;g.add(hole);
+    const mz=new THREE.Mesh(new THREE.CylinderGeometry(0.3,0.32,0.5,14),plaster);mz.position.set(0,0.55,-0.15);g.add(mz);
+    const dome=new THREE.Mesh(new THREE.SphereGeometry(0.31,18,8,0,Math.PI*2,0,Math.PI/2),tile);dome.position.set(0,0.8,-0.15);g.add(dome);
+    [[-0.85,-0.65],[0.85,-0.65]].forEach(([x,z])=>{const t=new THREE.Mesh(new THREE.CylinderGeometry(0.08,0.11,0.65,10),brick);t.position.set(x,0.32,z);g.add(t);});
+  }
+  g.traverse(o=>{if(o.isMesh){o.castShadow=true;o.receiveShadow=true;}});return g;
+}
+// Shirik-Rabat fortress (landmark): oval double wall with moat
+(function(){
+  const g=new THREE.Group(),cx=-3.6,cz=2.35;
+  [[1.25,0.85,0.16,brick],[1.05,0.7,0.12,brickD]].forEach(([a,b,hh,m])=>{const sh=new THREE.Shape();sh.absellipse(0,0,a,b,0,Math.PI*2);const hole=new THREE.Path();hole.absellipse(0,0,a-0.08,b-0.08,0,Math.PI*2,true);sh.holes.push(hole);
+    const geo=new THREE.ExtrudeGeometry(sh,{depth:hh,bevelEnabled:false,curveSegments:48});geo.rotateX(-Math.PI/2);const w=new THREE.Mesh(geo,m);w.castShadow=true;g.add(w);});
+  for(let i=0;i<14;i++){const a=i/14*Math.PI*2,t=new THREE.Mesh(new THREE.CylinderGeometry(0.06,0.07,0.2,8),brick);t.position.set(Math.cos(a)*1.21,0.1,Math.sin(a)*0.82);t.castShadow=true;g.add(t);}
+  const moat=new THREE.Mesh(new THREE.RingGeometry(1.35,1.5,60),M(0xb9a17d));moat.scale.set(1,0.68,1);moat.rotation.x=-Math.PI/2;moat.position.y=0.01;g.add(moat);
+  const maus=new THREE.Mesh(new THREE.CylinderGeometry(0.22,0.24,0.18,16),brickD);maus.position.set(0.2,0.09,0.1);g.add(maus);
+  g.position.set(cx,hAt(cx,cz),cz);scene.add(g);
+  window._fort=g;
+})();
+
+const ringMat=new THREE.MeshBasicMaterial({color:0x16706d,transparent:true,opacity:0.8,side:THREE.DoubleSide,depthWrite:false});
+const ring=new THREE.Mesh(new THREE.RingGeometry(1.35,1.48,64),ringMat);ring.rotation.x=-Math.PI/2;scene.add(ring);
+const groups=[],labels=[],geoLabels=[];
+SITES.forEach((s,i)=>{
+  const [x,z]=s.pos,g=build(s.kind);g.position.set(x,hAt(x,z)-0.02,z);g.scale.setScalar(0.85);g.userData.i=i;scene.add(g);groups.push(g);
+  const el=document.createElement("div");el.className="lbl";el.innerHTML=`<b>${s.code.slice(-2)}</b><span></span>`;
+  el.onclick=()=>select(i,true);$("#labels").appendChild(el);labels.push(el);
+});
+const town=new THREE.Group();
+[[0,0,0.3],[0.32,0.2,0.2],[-0.28,0.25,0.22],[0.1,-0.32,0.16],[-0.4,-0.2,0.14],[0.45,-0.25,0.12]].forEach(([x,z,h])=>{const b=box(0.2,h,0.2,plaster);b.position.set(x,h/2,z);b.castShadow=true;town.add(b);});
+town.position.set(0.3,hAt(0.3,-2.3),-2.3);scene.add(town);
+function geo(key,obj,dy,x,z){const el=document.createElement("div");el.className="lbl geo";$("#labels").appendChild(el);const o=obj||{position:new THREE.Vector3(x,0.1,z)};geoLabels.push({el,key,o,dy});}
+geo("town",town,0.7);geo("syr",null,0.1,-6.5,-3.4);geo("zhana",null,0.1,6.6,1.65);
+
+// route line
+const routePts=["town","mopshe","shirik","kushikbai"].map(k=>k==="town"?town.position:groups[SITES.findIndex(s=>s.id===k)].position);
+const rCurve=new THREE.CatmullRomCurve3(routePts.map(p=>new THREE.Vector3(p.x,0,p.z)),false,"centripetal");
+const rPts=rCurve.getSpacedPoints(160).map(p=>new THREE.Vector3(p.x,hAt(p.x,p.z)+0.06,p.z));
+const rGeo=new THREE.BufferGeometry().setFromPoints(rPts);
+const routeLine=new THREE.Line(rGeo,new THREE.LineDashedMaterial({color:0x16706d,dashSize:0.18,gapSize:0.1}));routeLine.computeLineDistances();scene.add(routeLine);
+const walker=new THREE.Mesh(new THREE.SphereGeometry(0.07,12,8),new THREE.MeshBasicMaterial({color:0x16706d}));scene.add(walker);
+
+const target=new THREE.Vector3(),camGoal=new THREE.Vector3();let flying=false;
+function select(i,fly){
+  cur=i;tab=0;renderList();renderCard();
+  labels.forEach((l,k)=>l.classList.toggle("on",k===i));
+  const g=groups[i];ring.position.set(g.position.x,g.position.y+0.04,g.position.z);
+  if(fly){target.copy(g.position);camGoal.copy(g.position).add(new THREE.Vector3(1.6,3.4,4.2));flying=true;}
+  if(fly)try{history.replaceState(null,"","#"+SITES[i].id)}catch(e){}
+}
+$("#t-reset").onclick=()=>{target.copy(HOME.tgt);camGoal.copy(HOME.pos);flying=true;};
+$("#t-route").onclick=e=>{const on=e.currentTarget.getAttribute("aria-pressed")!=="true";e.currentTarget.setAttribute("aria-pressed",on);routeLine.visible=walker.visible=on;};
+
+const mouse=new THREE.Vector2();let down=null;
+canvas.addEventListener("pointerdown",e=>{down=[e.clientX,e.clientY];flying=false;});
+canvas.addEventListener("pointerup",e=>{
+  if(!down||Math.hypot(e.clientX-down[0],e.clientY-down[1])>6)return;
+  const r=canvas.getBoundingClientRect();mouse.set((e.clientX-r.left)/r.width*2-1,-(e.clientY-r.top)/r.height*2+1);
+  rc.setFromCamera(mouse,camera);const hit=rc.intersectObjects(groups,true);
+  if(hit.length){let o=hit[0].object;while(o.parent&&o.userData.i===undefined)o=o.parent;select(o.userData.i,true);}
+});
+function resize(){const w=stage.clientWidth,h=stage.clientHeight;renderer.setSize(w,h,false);camera.aspect=w/h;camera.fov=w<500?52:42;camera.updateProjectionMatrix();}
+new ResizeObserver(resize).observe(stage);resize();
+
+const v=new THREE.Vector3(),reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
+function place(el,p,dy){
+  v.copy(p);v.y+=dy;v.project(camera);const w=stage.clientWidth,h=stage.clientHeight;
+  el.style.transform=`translate(${(v.x*.5+.5)*w}px,${(-v.y*.5+.5)*h}px) translate(-50%,-100%) translateY(-6px)`;
+  el.style.display=v.z<1&&Math.abs(v.x)<1.1&&Math.abs(v.y)<1.1?"flex":"none";
+}
+(function loop(t){
+  requestAnimationFrame(loop);t=t||0;
+  if(flying){const k=reduce?1:0.07;controls.target.lerp(target,k);camera.position.lerp(camGoal,k);if(camera.position.distanceTo(camGoal)<0.02)flying=false;}
+  ring.material.opacity=0.5+0.3*Math.sin(t/420);
+  if(walker.visible){const u=(t/14000)%1,p=rPts[Math.floor(u*(rPts.length-1))];walker.position.copy(p).add(new THREE.Vector3(0,0.05,0));}
+  controls.update();renderer.render(scene,camera);
+  groups.forEach((g,i)=>place(labels[i],g.position,1.2));
+  geoLabels.forEach(g=>place(g.el,g.o.position,g.dy));
+})();
+
+try{const l=localStorage.getItem("zh-lang");if(l&&UI[l])lang=l;}catch(e){}
+const start=SITES.findIndex(s=>"#"+s.id===location.hash);
+setLang(lang);select(start>=0?start:0,start>=0);
+</script>
+
+</body>
+</html>
