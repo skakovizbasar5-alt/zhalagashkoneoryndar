@@ -1,0 +1,413 @@
+<!doctype html>
+<html lang="kk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Жобаны қорғау · Жалағаш</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=PT+Serif:ital,wght@0,400;0,700;1,400&family=PT+Sans:wght@400;700&family=PT+Mono&display=swap">
+<style>
+/* Layout: one scrolling presentation — each section is a screen-sized "slide" with a fixed progress rail and keyboard/arrow navigation */
+:root{
+  --bg:#f1ebdf; --paper:#fbf8f2; --fg:#251d15; --muted:#76685a; --line:#ddd2c0;
+  --glaze:#16706d; --clay:#a9592f; --iron:#3b3027; --sand:#e6dcc8; --risk:#b8432e;
+  --display:"PT Serif",Georgia,serif; --body:"PT Sans","Segoe UI",Arial,sans-serif; --mono:"PT Mono",ui-monospace,Menlo,monospace;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#17130f; --paper:#211b16; --fg:#efe6d7; --muted:#a7988a; --line:#3a3027;
+  --glaze:#4db5ae; --clay:#de8e5e; --iron:#e7dccb; --sand:#2a231c; --risk:#e8705a; color-scheme:dark}}
+*{box-sizing:border-box}
+html{scroll-snap-type:y proximity;scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{margin:0;background:var(--bg);color:var(--fg);font:17px/1.55 var(--body);padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom)}
+:focus-visible{outline:2px solid var(--glaze);outline-offset:3px}
+h1,h2,h3{font-family:var(--display);line-height:1.12;text-wrap:balance;margin:0}
+a{color:var(--glaze)}
+.slide{min-height:100svh;scroll-snap-align:start;display:flex;flex-direction:column;justify-content:center;
+  padding-block:72px 84px;padding-left:max(20px,env(safe-area-inset-left,0px));padding-right:max(20px,env(safe-area-inset-right,0px));border-bottom:1px solid var(--line);position:relative}
+.in{max-width:1040px;margin:0 auto;width:100%;display:flex;flex-direction:column;gap:22px}
+.num{font:700 12px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--clay);display:flex;gap:10px;align-items:center}
+.num::after{content:"";flex:0 0 48px;height:1px;background:var(--clay)}
+h2{font-size:clamp(28px,4.6vw,46px)}
+.lead{font-size:clamp(17px,2vw,20px);color:var(--muted);max-width:62ch;margin:0}
+.grid{display:grid;gap:14px}
+.g2{grid-template-columns:repeat(2,minmax(0,1fr))}.g3{grid-template-columns:repeat(3,minmax(0,1fr))}.g4{grid-template-columns:repeat(4,minmax(0,1fr))}
+@media (max-width:820px){.g3,.g4{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:560px){.g2,.g3,.g4{grid-template-columns:1fr}}
+.box{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:18px 20px;min-width:0}
+.box h3{font-size:19px;margin-bottom:6px}
+.box p{margin:0;font-size:15.5px;color:var(--muted)}
+.k{font:700 11.5px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--glaze);margin-bottom:8px;display:block}
+ol.steps{list-style:none;margin:0;padding:0;display:grid;gap:10px;counter-reset:s}
+ol.steps li{counter-increment:s;display:grid;grid-template-columns:44px 1fr;gap:14px;align-items:start;background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:14px 16px;font-size:16px}
+ol.steps li::before{content:counter(s,decimal-leading-zero);font:700 15px var(--mono);color:var(--clay);padding-top:1px}
+
+/* title slide */
+.title{background:var(--iron);color:#f3ece2;border:0}
+.title .in{gap:26px}
+.title .num{color:#deb88c}.title .num::after{background:#deb88c}
+.title h1{font-size:clamp(32px,5.6vw,62px);color:#fff;max-width:20ch}
+.title .meta{display:flex;flex-wrap:wrap;gap:8px}
+.title .chip{font:700 13px var(--mono);border:1px solid rgba(255,255,255,.25);color:#e8dccb;border-radius:6px;padding:6px 10px}
+.title .sup{color:#cbbfae;font-size:15.5px;max-width:60ch}
+.title .start{align-self:flex-start;font:700 15px var(--body);background:#deb88c;color:#2c241d;border-radius:8px;padding:12px 18px;text-decoration:none}
+.strata{position:absolute;inset:auto 0 0 0;height:120px;opacity:.9;pointer-events:none}
+
+/* stats */
+.stat{display:flex;flex-direction:column;gap:2px}
+.stat b{font:700 clamp(34px,5vw,52px)/1 var(--display);color:var(--clay)}
+.stat span{font-size:14.5px;color:var(--muted)}
+.threats{display:flex;flex-wrap:wrap;gap:8px}
+.threats span{font:700 13.5px var(--body);border:1px solid var(--risk);color:var(--risk);border-radius:999px;padding:6px 12px}
+
+/* hypothesis */
+.hyp{border-left:4px solid var(--glaze);padding:6px 0 6px 20px;font:italic 400 clamp(19px,2.4vw,25px)/1.45 var(--display);max-width:52ch}
+
+/* eras */
+.eras{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0;border:1px solid var(--line);border-radius:10px;overflow:hidden}
+@media (max-width:700px){.eras{grid-template-columns:1fr 1fr}}
+.era{padding:16px;background:var(--paper);border-right:1px solid var(--line);display:flex;flex-direction:column;gap:6px}
+.era:last-child{border-right:0}
+.era .d{font:700 12px var(--mono);color:var(--muted)}
+.era h3{font-size:18px}
+.era p{margin:0;font-size:14px;color:var(--muted)}
+.era .bar{height:6px;border-radius:3px;margin-top:auto}
+
+/* table */
+.tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--paper)}
+table{border-collapse:collapse;width:100%;min-width:680px;font-size:15px}
+th,td{text-align:left;padding:12px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font:700 11.5px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);background:var(--sand)}
+tr:last-child td{border-bottom:0}
+td .c{font:700 12px var(--mono);color:#fff;background:var(--clay);border-radius:4px;padding:2px 6px;white-space:nowrap}
+td a{font-weight:700}
+.dots{display:flex;gap:3px}.dots i{width:16px;height:6px;border-radius:2px;background:var(--line)}.dots i.f{background:var(--risk)}
+
+/* compare */
+.cmp{display:grid;grid-template-columns:1fr 60px 1fr;gap:0;align-items:stretch}
+@media (max-width:700px){.cmp{grid-template-columns:1fr}.cmp .eq{transform:rotate(90deg);height:40px}}
+.cmp .eq{display:grid;place-items:center;font:700 28px var(--display);color:var(--muted)}
+.src{border-radius:10px;padding:20px;background:var(--paper);border:1px solid var(--line)}
+.src.oral{border-top:4px solid var(--clay)}.src.arch{border-top:4px solid var(--glaze)}
+.src.oral p{font:italic 19px/1.5 var(--display);margin:0}
+.src.arch p{margin:0}
+.verdict{background:var(--iron);color:var(--bg);border-radius:10px;padding:18px 20px;font-weight:700}
+
+/* digital */
+.flow{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}
+@media (max-width:820px){.flow{grid-template-columns:1fr}}
+.fstep{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:14px;position:relative}
+.fstep b{display:block;font-size:15.5px}.fstep span{font-size:13.5px;color:var(--muted)}
+.fstep .n{font:700 12px var(--mono);color:var(--glaze)}
+.plaques{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+@media (max-width:700px){.plaques{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.plaques a{display:block;border-radius:10px;overflow:hidden;box-shadow:0 6px 18px rgba(30,20,10,.18);transition:transform .2s}
+.plaques a:hover{transform:translateY(-3px)}
+.plaques img{display:block;width:100%;height:auto}
+.cta{display:flex;flex-wrap:wrap;gap:10px}
+.btn{font:700 15px var(--body);text-decoration:none;color:var(--paper);background:var(--iron);border-radius:8px;padding:12px 18px;display:inline-flex;gap:8px;align-items:center}
+.btn.alt{background:var(--glaze);color:#fff}
+
+/* survey */
+.q{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:18px 20px}
+.q h3{font:700 16px var(--body);margin-bottom:12px}
+.bar{display:grid;grid-template-columns:minmax(0,1fr) 52px;gap:4px 10px;align-items:center;margin-bottom:10px;font-size:14.5px}
+.bar .tr{grid-column:1/-1;height:12px;background:var(--line);border-radius:3px;overflow:hidden}
+.bar .tr i{display:block;height:100%;background:var(--muted);width:var(--w);transform-origin:left;animation:grow 1s ease-out both}
+.bar.top .tr i{background:var(--glaze)}
+.bar b{font:700 15px var(--mono);text-align:right;font-variant-numeric:tabular-nums}
+@keyframes grow{from{transform:scaleX(.05)}to{transform:scaleX(1)}}
+@media (prefers-reduced-motion:reduce){.bar .tr i{animation:none}}
+.insight{display:grid;grid-template-columns:auto 1fr;gap:16px;align-items:center;background:var(--sand);border-radius:10px;padding:16px 20px}
+.insight b{font:700 44px/1 var(--display);color:var(--glaze)}
+
+/* final */
+.thanks{background:var(--iron);color:#f3ece2;border:0}
+.thanks h2{color:#fff;font-size:clamp(36px,7vw,72px)}
+.thanks .lead{color:#cbbfae}
+.refs{margin:0;padding-left:22px;font-size:14px;color:var(--muted);display:grid;gap:4px;max-width:80ch}
+
+/* navigation */
+.rail{position:fixed;right:max(12px,env(safe-area-inset-right,0px));top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:7px;z-index:5}
+.rail a{width:9px;height:9px;border-radius:50%;background:var(--line);display:block}
+.rail a.on{background:var(--clay);transform:scale(1.35)}
+@media (max-width:700px){.rail{display:none}}
+.pbar{position:fixed;top:0;left:0;height:3px;background:var(--clay);width:0;z-index:6}
+.ctl{position:fixed;right:max(14px,env(safe-area-inset-right,0px));bottom:calc(14px + env(safe-area-inset-bottom,0px));display:flex;gap:6px;align-items:center;z-index:5;
+  background:color-mix(in srgb,var(--paper) 90%,transparent);border:1px solid var(--line);border-radius:10px;padding:5px;backdrop-filter:blur(6px)}
+.ctl button{all:unset;cursor:pointer;width:38px;height:38px;display:grid;place-items:center;border-radius:7px;font:700 18px var(--body);color:var(--fg)}
+.ctl button:hover{background:var(--sand)}
+.ctl .pg{font:700 13px var(--mono);color:var(--muted);min-width:56px;text-align:center;font-variant-numeric:tabular-nums}
+.ctl a{font:700 13px var(--body);text-decoration:none;color:var(--glaze);padding:0 10px}
+</style>
+</head>
+<body>
+<div class="pbar" id="pbar"></div>
+<nav class="rail" id="rail" aria-label="Слайдтар"></nav>
+
+<!-- 1 -->
+<section class="slide title" id="s1">
+  <div class="in">
+    <div class="num">Ғылыми жоба · Тарих / Өлкетану</div>
+    <h1>Жалағаш өңіріндегі ұмыт қалған тарихи орындар мен сакралды нысандарды зерттеу, цифрландыру және туристік айналымға енгізу</h1>
+    <div class="meta"><span class="chip">Қызылорда облысы, Жалағаш ауданы</span><span class="chip">2026</span><span class="chip">Тарихи-мәдени ескерткіштер және заманауи Қазақстанның даму перспективалары</span></div>
+    <div class="sup">Ғылыми жетекшісі: Қорқыт Ата атындағы Қызылорда университеті, Тарих және әлеуметтік ғылымдар институтының доценті, PhD</div>
+    <a class="start" href="#s2">Қорғауды бастау ↓</a>
+  </div>
+  <svg class="strata" viewBox="0 0 1200 120" preserveAspectRatio="none" aria-hidden="true">
+    <path d="M0 60 C200 40 380 75 600 55 S1000 40 1200 58 V120 H0Z" fill="#5a4a3c"/>
+    <path d="M0 80 C220 70 420 95 640 78 S1000 70 1200 82 V120 H0Z" fill="#7a6048"/>
+    <path d="M0 100 C260 92 470 108 700 98 S1010 92 1200 102 V120 H0Z" fill="#a9592f"/>
+    <path d="M140 60 q60 -40 120 0z M820 52 q50 -34 100 0z" fill="#8a6f55"/>
+  </svg>
+</section>
+
+<!-- 2 -->
+<section class="slide" id="s2">
+  <div class="in">
+    <div class="num">01 · Өзектілігі</div>
+    <h2>Сыр бойының тарихи жады шөл мен эрозияның астында өшіп барады</h2>
+    <p class="lead">Сыр өңірі — Ұлы Жібек жолының торабы, оғыз-қыпшақ мемлекеттілігінің бесігі. Жалағашта әлемге белгілі Шірік-Рабатпен қатар, аты ұмытыла бастаған жүздеген сакралды орын, бекініс-қоныс, мешіт-медресе қалдықтары мен қорымдар бар.</p>
+    <div>
+      <span class="k">Ескерткіштерді қиратып жатқан факторлар</span>
+      <div class="threats"><span>Климаттың құрғауы</span><span>Шөлдеу</span><span>Тұздану</span><span>Жел эрозиясы</span><span>Шаруашылық игеру</span><span>Адами фактор, тонау</span></div>
+    </div>
+    <div class="box"><span class="k">Мемлекеттік негіз</span><p>«Болашаққа бағдар: рухани жаңғыру» және «Ұлы даланың жеті қыры» бағдарламалық мақалаларында жергілікті сакралды географияны зерделеу және мұраны цифрландыру басым бағыт ретінде белгіленген.</p></div>
+  </div>
+</section>
+
+<!-- 3 -->
+<section class="slide" id="s3">
+  <div class="in">
+    <div class="num">02 · Мақсат және болжам</div>
+    <h2>Ұмыт қалған орындарды анықтап, ғылыми негіздеп, цифрлық форматта сақтау</h2>
+    <div class="grid g2">
+      <div class="box"><span class="k">Мақсаты</span><p style="color:var(--fg)">Жалағаш өңіріндегі ұмыт қалған немесе аз зерттелген тарихи, археологиялық және сакралды орындарды кешенді зерттеу, тарихи маңызын дәлелдеу және оларды сақтау, цифрландыру, туристік айналымға енгізу бойынша нақты ұсыныстар әзірлеу.</p></div>
+      <div class="box"><span class="k">Зерттеу объектісі мен пәні</span><p style="color:var(--fg)"><b>Объект:</b> Жалағаш ауданының тарихи-мәдени, археологиялық ландшафты және сакралды нысандары.<br><b>Пән:</b> орындардың пайда болу тарихы, қазіргі жай-күйі, сақтау және цифрландыру жолдары.</p></div>
+    </div>
+    <div><span class="k">Ғылыми болжам</span>
+      <p class="hyp">Егер ұмыт қалған орындар жүйелі паспортталып, интерактивті GIS-картаға түсіріліп, QR-навигациямен жабдықталса, бұл өлкетану ғылымын жаңа деректермен байытады, жастардың тарихи санасын арттырады және ішкі туризмге серпін береді.</p></div>
+  </div>
+</section>
+
+<!-- 4 -->
+<section class="slide" id="s4">
+  <div class="in">
+    <div class="num">03 · Міндеттер</div>
+    <h2>Бес міндет</h2>
+    <ol class="steps">
+      <li>Ауданның тарихи-археологиялық картасын зерделеп, жазба және архивтік деректерге шолу жасау</li>
+      <li>Ұмыт қалған немесе қирау алдындағы орындарды (қоныстар, кесенелер, арық бойлары, мазарлар) анықтап, сипаттама беру</li>
+      <li>Жазба деректер мен этнографиялық аңыздарды салыстырмалы-тарихи талдау арқылы нысандардың шынайы маңызын ашу</li>
+      <li>Оқушылар мен тұрғындар арасында сауалнама жүргізіп, тарихи таным деңгейін сараптау</li>
+      <li>Нысандарды цифрландыру (GIS-карта, QR-кодтау) және «Жалағаш өлкетану соқпақтары» маршрутын жасақтау</li>
+    </ol>
+  </div>
+</section>
+
+<!-- 5 -->
+<section class="slide" id="s5">
+  <div class="in">
+    <div class="num">04 · Әдістеме және кезеңдер</div>
+    <h2>Мұрағаттан далаға, даладан цифрға</h2>
+    <div class="grid g3">
+      <div class="box"><span class="k">Тарихи-салыстырмалы</span><p>Архив жазбалары мен археологиялық есептерді салыстыру</p></div>
+      <div class="box"><span class="k">Далалық өлкетану</span><p>Нысандарды визуалды байқау, GPS-геолокациясын бекіту</p></div>
+      <div class="box"><span class="k">Oral history</span><p>Көнекөз қариялар мен өлкетанушылардан сұхбат, аңыздар жинау</p></div>
+      <div class="box"><span class="k">Әлеуметтанулық</span><p>Сауалнама, сандық-сапалық талдау</p></div>
+      <div class="box"><span class="k">Картографиялау</span><p>Google Earth / GIS, QR-технологиялар</p></div>
+      <div class="box"><span class="k">Дереккөз базасы</span><p>С.П. Толстов бастаған Хорезм экспедициясының есептері, Сыр бойы өлкетану еңбектері</p></div>
+    </div>
+    <div class="grid g4">
+      <div class="box"><span class="k">1 · Дайындық</span><p>Архив пен экспедиция есептерін зерделеу</p></div>
+      <div class="box"><span class="k">2 · Далалық</span><p>Қорғандар, медресе орындары, қорымдарға шолу, координат тіркеу</p></div>
+      <div class="box"><span class="k">3 · Әлеуметтанулық</span><p>Оқушылар мен тұрғындар сауалнамасы</p></div>
+      <div class="box"><span class="k">4 · Қорытынды</span><p>Цифрлық карта, QR-прототиптер, мектептік соқпақ</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- 6 -->
+<section class="slide" id="s6">
+  <div class="in">
+    <div class="num">05 · Тарихи-археологиялық ландшафт</div>
+    <h2>Жаңадария мен Іңкәрдария арналары бойындағы үш мыңжылдық</h2>
+    <p class="lead">Жалағаш ауданы Ежелгі Сырдарияның ескі арналары бойында орналасқан. Мұнда Шірік-Рабат (б.з.д. V–II ғғ.), Бәбіш-Мола, Баланды сияқты әлемге белгілі кешендер бар, ал олардың көлеңкесінде ондаған жергілікті ескерткіш ұмытылып барады.</p>
+    <div class="eras">
+      <div class="era"><span class="d">б.з.д. I мыңжылдық</span><h3>Сақ-апасиактар</h3><p>Қамалдар мен обалар</p><span class="bar" style="background:#7a6048"></span></div>
+      <div class="era"><span class="d">VII–XII ғғ.</span><h3>Оғыз-қыпшақ</h3><p>Қалалар, суармалы егіншілік, Жібек жолы</p><span class="bar" style="background:#a9592f"></span></div>
+      <div class="era"><span class="d">XV–XVIII ғғ.</span><h3>Қазақ хандығы</h3><p>Жайлау мен қыстау жолдары, бағдар-төбелер</p><span class="bar" style="background:#c9a271"></span></div>
+      <div class="era"><span class="d">XIX – XX ғ. басы</span><h3>Ишандар мен мазарлар</h3><p>Шикі кірпішті кесенелер, медреселер</p><span class="bar" style="background:#16706d"></span></div>
+    </div>
+    <div class="grid g3">
+      <div class="box"><h3>Ескі Қожаназар мен Мөпше төбе</h3><p>Сақ және ортағасырлық қыш қалдықтары бар бекіністі қоныстар</p></div>
+      <div class="box"><h3>Мыңбұлақ пен Күшікбай</h3><p>XIX–XX ғғ. шикі кірпішті қорымдар мен кесенелер, төбешікке айналған</p></div>
+      <div class="box"><h3>Ишан-молдалар медреселері</h3><p>Кеңес кезінде қиратылған рухани-ағартушылық орталықтар (Қалқай ишан)</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- 7 -->
+<section class="slide" id="s7">
+  <div class="in">
+    <div class="num">06 · Зерттелген нысандар · Кесте 1</div>
+    <h2>Төрт нысан: паспорт, жағдай және қауіп деңгейі</h2>
+    <div class="tablewrap"><table>
+      <thead><tr><th>Шифр</th><th>Нысан</th><th>Дәуірі</th><th>Орны</th><th>Жағдайы</th><th>Қауіп</th></tr></thead>
+      <tbody>
+        <tr><td><span class="c">ЖЛ-01</span></td><td><a href="cards/shirik.html">Шірік-Рабат төбелері маңайындағы сақ обалары</a></td><td>б.з.д. V–II ғғ.</td><td>Жалағаштан оңтүстік-батысқа</td><td>Жартылай тоналған, эрозияға ұшыраған</td><td><span class="dots"><i class="f"></i><i class="f"></i><i class="f"></i></span></td></tr>
+        <tr><td><span class="c">ЖЛ-02</span></td><td><a href="cards/mopshe.html">Мөпше төбе қонысы</a></td><td>VII–X ғғ. (Оғыз)</td><td>Ескі Жаңадария арнасы</td><td>Беткі қабаты мүжілген, қыш шашылған</td><td><span class="dots"><i class="f"></i><i class="f"></i><i></i></span></td></tr>
+        <tr><td><span class="c">ЖЛ-03</span></td><td><a href="cards/kushikbai.html">Ескі Күшікбай қорымы мен мазары</a></td><td>XIX ғ. аяғы</td><td>Ауданның шөлді аймағы</td><td>Шикі кірпіш, күмбездері құлаған</td><td><span class="dots"><i class="f"></i><i class="f"></i><i class="f"></i></span></td></tr>
+        <tr><td><span class="c">ЖЛ-04</span></td><td><a href="cards/kalkai.html">Қалқай ишан кесенесі мен медресе орны</a></td><td>XIX ғ.</td><td>Аудандар шекарасы маңы</td><td>Қалпына келтіру мен қорғау қажет</td><td><span class="dots"><i class="f"></i><i class="f"></i><i></i></span></td></tr>
+      </tbody>
+    </table></div>
+    <p class="lead" style="font-size:15px">Нысан атауын басқанда оның QR-карточкасы ашылады.</p>
+  </div>
+</section>
+
+<!-- 8 -->
+<section class="slide" id="s8">
+  <div class="in">
+    <div class="num">07 · Салыстырмалы-тарихи талдау</div>
+    <h2>Аңыз бен археология: Мөпше төбе мысалы</h2>
+    <div class="cmp">
+      <div class="src oral"><span class="k" style="color:var(--clay)">Ауызша тарих</span><p>Қариялар Мөпше төбені «көне қаланың жұрты, Жібек жолының керуендері тоқтаған жер» деп сипаттайды.</p></div>
+      <div class="eq">≈</div>
+      <div class="src arch"><span class="k">Археологиялық дерек</span><p>Аймақтан X–XII ғасырлардағы суармалы егіншілік каналдарының іздері және штампталған араб жазуы бар қыш ыдыс сынықтары табылған — сауда мен қолөнердің айғағы.</p></div>
+    </div>
+    <div class="verdict">Қорытынды: аңызда тарихи шындықтың өзегі бар. Мөпше төбе — жай «төбе» емес, ортағасырлық қалалық мәдениет пен сауда инфрақұрылымының нысаны.</div>
+    <div class="box"><span class="k">Этнографиялық бақылау</span><p>Жаңадария мен Қуаңдария бойын жайлаған Шөмекей, Төртқара, Кете рулары жайлау мен қыстауға көшкенде осы төбелерді бағдар ретінде пайдаланған.</p></div>
+  </div>
+</section>
+
+<!-- 9 -->
+<section class="slide" id="s9">
+  <div class="in">
+    <div class="num">08 · Цифрландыру · Нәтиже</div>
+    <h2>Жасалған өнім: 3D өлкетану картасы және «QR-Тарих» тақтайшалары</h2>
+    <div class="flow">
+      <div class="fstep"><span class="n">01</span><b>Тақтайша</b><span>Нысан басындағы металл QR-тақтайша</span></div>
+      <div class="fstep"><span class="n">02</span><b>Сканерлеу</b><span>Смартфон камерасы, қосымша қажет емес</span></div>
+      <div class="fstep"><span class="n">03</span><b>Карточка</b><span>Тарихы, аңыз бен дерек, сақтау шаралары</span></div>
+      <div class="fstep"><span class="n">04</span><b>3D модель</b><span>Нысанның айналатын моделі</span></div>
+      <div class="fstep"><span class="n">05</span><b>Үш тіл</b><span>Қазақ, орыс, ағылшын</span></div>
+    </div>
+    <div class="plaques">
+      <a href="cards/shirik.html"><img src="qr/QR_01_shirik.png" alt="ЖЛ-01 QR-тақтайша" loading="lazy"></a>
+      <a href="cards/mopshe.html"><img src="qr/QR_02_mopshe.png" alt="ЖЛ-02 QR-тақтайша" loading="lazy"></a>
+      <a href="cards/kushikbai.html"><img src="qr/QR_03_kushikbai.png" alt="ЖЛ-03 QR-тақтайша" loading="lazy"></a>
+      <a href="cards/kalkai.html"><img src="qr/QR_04_kalkai.png" alt="ЖЛ-04 QR-тақтайша" loading="lazy"></a>
+    </div>
+    <div class="cta"><a class="btn alt" href="index.html">3D картаны ашу →</a><a class="btn" href="qr/QR_cards_A4.pdf">Тақтайшалар A4 (PDF)</a></div>
+  </div>
+</section>
+
+<!-- 10 -->
+<section class="slide" id="s10">
+  <div class="in">
+    <div class="num">09 · Сауалнама · 2023–2024 оқу жылы</div>
+    <h2>150 респондент не айтты?</h2>
+    <div class="grid g4">
+      <div class="stat"><b>150</b><span>респондент</span></div>
+      <div class="stat"><b>100</b><span>оқушы</span></div>
+      <div class="stat"><b>30</b><span>мұғалім</span></div>
+      <div class="stat"><b>20</b><span>тұрғын</span></div>
+    </div>
+    <div class="grid g2">
+      <div class="q"><h3>Шірік-Рабаттан басқа қандай орындарды білесіз?</h3>
+        <div class="bar"><span>Тек Шірік-Рабатты</span><b>58%</b><div class="tr"><i style="--w:58%"></i></div></div>
+        <div class="bar"><span>Бұқарбай батыр кесенесі және 1–2 нысан</span><b>27%</b><div class="tr"><i style="--w:27%"></i></div></div>
+        <div class="bar top"><span>Ұмыт қалған төбелер мен мазарларды</span><b>15%</b><div class="tr"><i style="--w:15%"></i></div></div></div>
+      <div class="q"><h3>Өлкетану экскурсиясына қатыстыңыз ба?</h3>
+        <div class="bar"><span>Иә, қатыстым</span><b>18%</b><div class="tr"><i style="--w:18%"></i></div></div>
+        <div class="bar top"><span>Жоқ, бірақ қатысқым келеді</span><b>68%</b><div class="tr"><i style="--w:68%"></i></div></div>
+        <div class="bar"><span>Қызығушылығым жоқ</span><b>14%</b><div class="tr"><i style="--w:14%"></i></div></div></div>
+      <div class="q"><h3>QR-код пен интерактивті картаны пайдаланар ма едіңіз?</h3>
+        <div class="bar top"><span>Өте пайдалы, міндетті түрде</span><b>84%</b><div class="tr"><i style="--w:84%"></i></div></div>
+        <div class="bar"><span>Мүмкін</span><b>12%</b><div class="tr"><i style="--w:12%"></i></div></div>
+        <div class="bar"><span>Қажеті жоқ</span><b>4%</b><div class="tr"><i style="--w:4%"></i></div></div></div>
+      <div class="q"><h3>Мектепте өлкетану үйірмелері мен соқпақтарын қолдайсыз ба?</h3>
+        <div class="bar top"><span>Толық қолдаймын</span><b>91%</b><div class="tr"><i style="--w:91%"></i></div></div>
+        <div class="bar"><span>Қолдамаймын / қиналамын</span><b>9%</b><div class="tr"><i style="--w:9%"></i></div></div></div>
+    </div>
+    <div class="insight"><b>15%</b><span>ғана ұмыт қалған орындар туралы біледі, ал <b style="font-size:inherit;font-family:inherit">84%</b> цифрлық форматты толық қолдайды — бұл жобаның өзектілігін дәлелдейді.</span></div>
+  </div>
+</section>
+
+<!-- 11 -->
+<section class="slide" id="s11">
+  <div class="in">
+    <div class="num">10 · Қорытынды</div>
+    <h2>Мақсат пен міндеттер орындалды</h2>
+    <div class="grid g2">
+      <div class="box"><span class="k">Жүйеленді</span><p style="color:var(--fg)">Жалағаштың ұмыт қалған ескерткіштері анықталып, төрт нысанға тарихи паспорт жасалды.</p></div>
+      <div class="box"><span class="k">Дәлелденді</span><p style="color:var(--fg)">Аңыз бен археологиялық деректі салыстыру нысандардың тарихи-мәдени құндылығын көрсетті.</p></div>
+      <div class="box"><span class="k">Анықталды</span><p style="color:var(--fg)">Сауалнама цифрлық өлкетануға жоғары әлеуметтік сұраныс бар екенін көрсетті.</p></div>
+      <div class="box"><span class="k">Ұсынылды</span><p style="color:var(--fg)">Цифрлық сақтау моделі: 3D карта, QR-карточкалар, үш тілдегі ақпарат.</p></div>
+    </div>
+    <p class="hyp">Шикі кірпіштен салынған ескерткіштер толық сақталмауы мүмкін; сондықтан оларды цифрлық форматта сақтау әлдеқайда тиімді.</p>
+  </div>
+</section>
+
+<!-- 12 -->
+<section class="slide" id="s12">
+  <div class="in">
+    <div class="num">11 · Практикалық ұсыныстар</div>
+    <h2>Нәтижені өмірге енгізу</h2>
+    <ol class="steps">
+      <li><span><b>«Жалағаш сакралды географиясы» GIS-картасы.</b> Аудандық мәдениет бөлімімен бірге барлық тарихи орындар белгіленген онлайн-карта.</span></li>
+      <li><span><b>«QR-Тарих» жобасы.</b> Нысандар басына үш тілде ақпарат беретін, аудиогидке сілтемесі бар QR-тақтайшалар.</span></li>
+      <li><span><b>«Жалағаш өлкетану соқпағы».</b> 7–11 сыныптарға арналған «Жалағаш – Мөпше төбе – Шірік-Рабат – Күшікбай» маршруты.</span></li>
+      <li><span><b>«Жас өлкетанушы» волонтерлік клубы.</b> Нысандарды абаттандыру, аңыз жинау, цифрлық контент дайындау.</span></li>
+    </ol>
+    <div class="grid g2">
+      <div class="box"><span class="k">Жаңалығы</span><p>Жалағаштың аз белгілі орындары алғаш рет кешенді өлкетанулық жүйеге түсіріліп, оларды қорғаудың цифрлық моделі (3D, интерактивті карта, QR) ұсынылды.</p></div>
+      <div class="box"><span class="k">Практикалық маңызы</span><p>«Өлкетану», «Қазақстан тарихы» факультативтерінде, аудандық музейде және туроператорлар маршруттарында қолдануға болады.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- 13 -->
+<section class="slide thanks" id="s13">
+  <div class="in">
+    <div class="num" style="color:#deb88c">Қорғау аяқталды</div>
+    <h2>Назарларыңызға рақмет!</h2>
+    <p class="lead">Сұрақтарыңызға дайынмын. Жобаның цифрлық бөлігін телефоннан қазір-ақ тексеруге болады.</p>
+    <div class="cta"><a class="btn alt" href="index.html">3D өлкетану картасы →</a><a class="btn" style="background:#deb88c;color:#2c241d" href="cards/mopshe.html">QR-карточка үлгісі</a></div>
+    <div>
+      <span class="k" style="color:#deb88c">Негізгі әдебиеттер</span>
+      <ol class="refs" style="color:#cbbfae">
+        <li>Байпақов К.М. Қазақстанның ортағасырлық қалалары мен қоныстары. — Алматы: Ғылым, 2010.</li>
+        <li>Толстов С.П. По следам древнехорезмийской цивилизации. — М.-Л., 1948.</li>
+        <li>Сыр елі. Энциклопедия / Бас ред. Б.Ғ. Аяған. — Алматы, 2013.</li>
+        <li>Курманкулов Ж. Археологические исследования на городище Чирик-Рабат // Известия НАН РК. — 2008. — №1.</li>
+        <li>Қожа Ұ. Сыр бойындағы ортағасырлық қалалар тарихы. — Түркістан, 2011.</li>
+        <li>Қазақстанның киелі жерлерінің географиясы. — Астана: Фолиант, 2017.</li>
+        <li>Жалағаш аудандық тарихи-өлкетану музейінің құжаттық қоры.</li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<div class="ctl" aria-label="Басқару">
+  <a href="index.html">Карта</a>
+  <button id="prev" aria-label="Алдыңғы слайд">↑</button>
+  <span class="pg" id="pg">1 / 13</span>
+  <button id="next" aria-label="Келесі слайд">↓</button>
+</div>
+
+<script>
+const slides=[...document.querySelectorAll(".slide")],rail=document.getElementById("rail");
+slides.forEach((s,i)=>{const a=document.createElement("a");a.href="#"+s.id;a.setAttribute("aria-label","Слайд "+(i+1));rail.appendChild(a);});
+let cur=0;
+function setCur(i){cur=i;document.getElementById("pg").textContent=(i+1)+" / "+slides.length;rail.querySelectorAll("a").forEach((a,k)=>a.classList.toggle("on",k===i));}
+const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting&&e.intersectionRatio>.45)setCur(slides.indexOf(e.target));});},{threshold:[.45,.6]});
+slides.forEach(s=>io.observe(s));
+function go(d){const i=Math.max(0,Math.min(slides.length-1,cur+d));slides[i].scrollIntoView({behavior:"smooth"});}
+document.getElementById("prev").onclick=()=>go(-1);document.getElementById("next").onclick=()=>go(1);
+addEventListener("keydown",e=>{if(["ArrowDown","PageDown"," "].includes(e.key)){e.preventDefault();go(1);}if(["ArrowUp","PageUp"].includes(e.key)){e.preventDefault();go(-1);}});
+addEventListener("scroll",()=>{const h=document.documentElement;document.getElementById("pbar").style.width=(h.scrollTop/(h.scrollHeight-h.clientHeight)*100)+"%";},{passive:true});
+setCur(0);
+</script>
+</body>
+</html>
