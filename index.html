@@ -3,45 +3,87 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<style>*,*::before,*::after{box-sizing:border-box}:root{color-scheme:light;padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom)}body{margin:0;font:14px system-ui,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
-</head>
-<body>
 <title>Жалағаш өлкетану картасы</title>
-<meta name="claude:viewport-fit-sides" content="cover">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=PT+Serif:ital,wght@0,400;0,700;1,400&family=PT+Sans:wght@400;700&family=PT+Mono&display=swap">
 <style>
-/* Layout: survey-sheet concept. Map scene first, then a field dossier per site (tabs), route, eras, survey, QR plaque, sources. */
+/* Survey-sheet concept: 3D map first, then a field dossier per site, eras and the QR plaque.
+   Breakpoints: mobile 320–479 · large mobile 480–767 · tablet 768–1023 · laptop 1024–1439 · desktop ≥1440 */
 :root{
   --bg:#f1ebdf; --paper:#fbf8f2; --fg:#251d15; --muted:#76685a; --line:#ddd2c0;
-  --glaze:#16706d; --clay:#a9592f; --iron:#3b3027; --sky:#e9e1d1; --risk:#b8432e;
-  --display:"PT Serif",Georgia,serif; --body:"PT Sans","Segoe UI",Arial,sans-serif; --mono:"PT Mono",ui-monospace,Menlo,monospace;
+  --glaze:#16706d; --clay:#a9592f; --iron:#3b3027; --sky:#e9e1d1; --risk:#b8432e; --head:rgba(241,235,223,.92);
+  --display:"PT Serif",Georgia,"Times New Roman",serif; --body:"PT Sans","Segoe UI",Arial,sans-serif; --mono:"PT Mono",ui-monospace,Menlo,Consolas,monospace;
+  --pad:16px; --gap:16px; --header:60px; --radius:14px;
+  color-scheme:light;
 }
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
   --bg:#17130f; --paper:#211b16; --fg:#efe6d7; --muted:#a7988a; --line:#3a3027;
-  --glaze:#4db5ae; --clay:#de8e5e; --iron:#e7dccb; --sky:#1d1813; --risk:#e8705a; color-scheme:dark}}
+  --glaze:#4db5ae; --clay:#de8e5e; --iron:#e7dccb; --sky:#1d1813; --risk:#e8705a; --head:rgba(23,19,15,.92); color-scheme:dark}}
 :root[data-theme="dark"]{
   --bg:#17130f; --paper:#211b16; --fg:#efe6d7; --muted:#a7988a; --line:#3a3027;
-  --glaze:#4db5ae; --clay:#de8e5e; --iron:#e7dccb; --sky:#1d1813; --risk:#e8705a; color-scheme:dark}
-html,body{background:var(--bg);color:var(--fg)}
-body{font-family:var(--body);font-size:15.5px;line-height:1.55}
-.wrap{width:100%;max-width:1440px;margin-inline:auto;padding-left:max(var(--pad,16px),env(safe-area-inset-left,0px));padding-right:max(var(--pad,16px),env(safe-area-inset-right,0px))}
-@media (min-width:768px){.wrap{--pad:24px}}@media (min-width:1024px){.wrap{--pad:40px}}
-:focus-visible{outline:2px solid var(--glaze);outline-offset:2px}
-h1,h2,h3{font-family:var(--display);line-height:1.15;text-wrap:balance;margin:0}
-.eyebrow{font:700 11px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--clay)}
+  --glaze:#4db5ae; --clay:#de8e5e; --iron:#e7dccb; --sky:#1d1813; --risk:#e8705a; --head:rgba(23,19,15,.92); color-scheme:dark}
+@media (min-width:768px){:root{--pad:24px;--gap:20px;--header:68px}}
+@media (min-width:1024px){:root{--pad:32px;--gap:24px;--header:76px}}
+@media (min-width:1440px){:root{--pad:48px;--header:80px}}
 
-header{padding-block:16px 12px;display:flex;flex-wrap:wrap;gap:10px 16px;align-items:end;justify-content:space-between}
-h1{font-size:clamp(24px,5vw,36px)}
-.sub{color:var(--muted);font-size:13.5px;margin:4px 0 0;max-width:60ch}
-.lang{display:flex;border:1px solid var(--line);border-radius:6px;overflow:hidden;background:var(--paper)}
-.lang button{font:700 12px var(--mono);letter-spacing:.06em;background:none;border:0;color:var(--muted);padding:7px 11px;cursor:pointer}
+*,*::before,*::after{box-sizing:border-box}
+html{background:var(--bg);scroll-behavior:smooth;scroll-padding-top:calc(var(--header) + 8px);-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--fg);font:400 16px/1.55 var(--body);overflow-x:hidden;overflow-x:clip;padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (min-width:1024px){body{font-size:17px}}
+img,svg,canvas{max-width:100%}
+:focus-visible{outline:2px solid var(--glaze);outline-offset:2px;border-radius:4px}
+h1,h2,h3{font-family:var(--display);line-height:1.15;text-wrap:balance;margin:0;overflow-wrap:break-word}
+p,li,dd{overflow-wrap:break-word}
+.eyebrow{font:700 11.5px/1.4 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--clay)}
+
+/* container */
+.wrap{width:100%;max-width:1440px;margin-inline:auto;padding-left:max(var(--pad),env(safe-area-inset-left,0px));padding-right:max(var(--pad),env(safe-area-inset-right,0px))}
+
+/* ===== header ===== */
+.site-header{position:sticky;top:0;z-index:50;background:var(--head);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--line);padding-top:env(safe-area-inset-top,0px)}
+.site-header .bar{height:var(--header);display:flex;align-items:center;justify-content:space-between;gap:16px}
+.logo{display:flex;align-items:center;gap:10px;min-height:44px;text-decoration:none;color:var(--fg);font:700 13px var(--mono);letter-spacing:.1em;white-space:nowrap;flex-shrink:0}
+.logo i{width:30px;height:30px;border-radius:50%;border:1.5px solid var(--clay);display:grid;place-items:center;font-style:normal;font-size:11px;color:var(--clay)}
+@media (max-width:359px){.logo .lt{display:none}}
+.menu{display:none;list-style:none;margin:0;padding:0;gap:4px}
+.menu a{display:flex;align-items:center;min-height:44px;padding:0 12px;border-radius:8px;color:var(--fg);text-decoration:none;font:700 14.5px var(--body);white-space:nowrap}
+.menu a:hover{background:var(--paper)}
+.hactions{display:flex;align-items:center;gap:8px}
+.lang{display:flex;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--paper)}
+.lang button{font:700 12px var(--mono);letter-spacing:.06em;background:none;border:0;color:var(--muted);min-width:44px;min-height:40px;padding:0 10px;cursor:pointer}
 .lang button[aria-pressed="true"]{background:var(--iron);color:var(--paper)}
+.back{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:44px;padding:0 16px;border-radius:8px;background:var(--clay);color:#fff;text-decoration:none;font:700 14px var(--body);white-space:nowrap}
+.hactions .lang,.hactions .back{display:none}
+.burger{all:unset;cursor:pointer;width:44px;height:44px;display:grid;place-items:center;border-radius:10px;border:1px solid var(--line);background:var(--paper)}
+.burger span,.burger span::before,.burger span::after{display:block;width:20px;height:2px;border-radius:2px;background:var(--fg);transition:transform .25s,background .2s}
+.burger span{position:relative}
+.burger span::before,.burger span::after{content:"";position:absolute;left:0}
+.burger span::before{top:-6px}.burger span::after{top:6px}
+.burger[aria-expanded="true"] span{background:transparent}
+.burger[aria-expanded="true"] span::before{transform:translateY(6px) rotate(45deg)}
+.burger[aria-expanded="true"] span::after{transform:translateY(-6px) rotate(-45deg)}
+.mpanel{border-top:1px solid var(--line);max-height:calc(100dvh - var(--header));overflow-y:auto}
+.mpanel .wrap{padding-block:8px 18px;display:grid;gap:14px}
+.mpanel ul{list-style:none;margin:0;padding:0}
+.mpanel li a{display:flex;align-items:center;justify-content:space-between;min-height:52px;border-bottom:1px solid var(--line);color:var(--fg);text-decoration:none;font:700 16px var(--body)}
+.mpanel li a::after{content:"→";color:var(--clay)}
+.mpanel .lang{align-self:start;justify-self:start}
+.mpanel .back{display:flex}
+@media (min-width:768px){.hactions .lang{display:flex}}
+@media (min-width:1024px){.menu{display:flex}.hactions .back{display:inline-flex}.burger,.mpanel{display:none!important}}
+@media (min-width:1024px) and (max-width:1279px){.menu a{padding:0 8px;font-size:14px}}
 
-/* stage */
-.stage{position:relative;height:min(64vh,580px);min-height:360px;background:var(--sky);overflow:hidden;border-block:1px solid var(--line)}
+/* ===== intro ===== */
+.intro{padding-block:clamp(20px,3vw,32px) clamp(16px,2.4vw,24px)}
+.intro .wrap{display:grid;gap:6px}
+h1{font-size:clamp(24px,2.4vw + 14px,40px)}
+.sub{color:var(--muted);font-size:clamp(14.5px,.4vw + 13px,16px);margin:4px 0 0;max-width:62ch}
+
+/* ===== 3D stage ===== */
+.stage{position:relative;height:clamp(340px,58svh,620px);background:var(--sky);overflow:hidden;border-block:1px solid var(--line)}
+@media (min-width:1024px){.stage{height:clamp(420px,66vh,680px)}}
 #c{display:block;width:100%;height:100%;touch-action:none;cursor:grab}
 .lbl{position:absolute;left:0;top:0;cursor:pointer;font:700 12px var(--body);background:var(--paper);color:var(--fg);
-  border:1px solid var(--line);padding:3px 9px 3px 3px;border-radius:5px;white-space:nowrap;display:flex;gap:6px;align-items:center;
+  border:1px solid var(--line);padding:3px 9px 3px 3px;border-radius:6px;white-space:nowrap;display:flex;gap:6px;align-items:center;
   box-shadow:0 3px 10px rgba(30,20,10,.18);transition:opacity .2s}
 .lbl::after{content:"";position:absolute;left:50%;bottom:-6px;width:1px;height:6px;background:var(--iron)}
 .lbl b{font:700 10.5px var(--mono);background:var(--clay);color:#fff;border-radius:3px;padding:2px 4px}
@@ -49,176 +91,206 @@ h1{font-size:clamp(24px,5vw,36px)}
 .lbl.on b{background:var(--glaze)}
 .lbl.geo{background:transparent;border:0;box-shadow:none;font:italic 400 12px var(--display);color:var(--muted);pointer-events:none;padding:0}
 .lbl.geo::after{display:none}
-.tools{position:absolute;top:10px;left:max(10px,env(safe-area-inset-left,0px));right:max(10px,env(safe-area-inset-right,0px));display:flex;justify-content:space-between;gap:8px;pointer-events:none}
+@media (max-width:479px){.lbl span{max-width:110px;overflow:hidden;text-overflow:ellipsis}}
+.tools{position:absolute;top:10px;left:max(10px,env(safe-area-inset-left,0px));right:max(10px,env(safe-area-inset-right,0px));display:flex;justify-content:space-between;align-items:flex-start;gap:8px;pointer-events:none}
 .tools>*{pointer-events:auto}
-.tg{display:flex;gap:4px;flex-wrap:wrap}
-.tbtn{font:700 11.5px var(--body);background:color-mix(in srgb,var(--paper) 88%,transparent);color:var(--fg);border:1px solid var(--line);border-radius:5px;padding:6px 9px;cursor:pointer;backdrop-filter:blur(4px)}
+.tg{display:flex;gap:6px;flex-wrap:wrap}
+.tbtn{font:700 13px var(--body);min-height:40px;padding:0 12px;background:color-mix(in srgb,var(--paper) 90%,transparent);color:var(--fg);border:1px solid var(--line);border-radius:8px;cursor:pointer;backdrop-filter:blur(4px)}
 .tbtn[aria-pressed="true"]{border-color:var(--glaze);color:var(--glaze)}
-.compass{font:700 11px var(--mono);color:var(--muted);text-align:center;line-height:1.05;background:color-mix(in srgb,var(--paper) 80%,transparent);border-radius:50%;width:34px;height:34px;display:grid;place-items:center;border:1px solid var(--line)}
-.legend{position:absolute;left:max(10px,env(safe-area-inset-left,0px));bottom:10px;display:flex;flex-wrap:wrap;gap:4px 12px;font:11px var(--mono);color:var(--muted);background:color-mix(in srgb,var(--paper) 85%,transparent);padding:5px 9px;border-radius:5px;max-width:calc(100% - 20px)}
+.compass{flex-shrink:0;font:700 11px var(--mono);color:var(--muted);text-align:center;line-height:1.05;background:color-mix(in srgb,var(--paper) 85%,transparent);border-radius:50%;width:40px;height:40px;display:grid;place-items:center;border:1px solid var(--line)}
+.legend{position:absolute;left:max(10px,env(safe-area-inset-left,0px));bottom:10px;display:flex;flex-wrap:wrap;gap:4px 12px;font:11.5px var(--mono);color:var(--muted);background:color-mix(in srgb,var(--paper) 88%,transparent);padding:6px 10px;border-radius:8px;max-width:calc(100% - 20px)}
 .legend i{display:inline-block;width:14px;height:3px;vertical-align:middle;margin-right:5px;border-radius:2px}
+.lg-syr{background:#3f8f9a}.lg-old{background:#e5dcc6;outline:1px solid #b9a98a}.lg-route{background:var(--glaze)}
 
-/* dossier */
-.dossier{display:grid;grid-template-columns:240px minmax(0,1fr);gap:24px;padding-block:22px}
-@media (max-width:780px){.dossier{grid-template-columns:1fr;gap:14px}}
-.list{display:flex;flex-direction:column;gap:2px}
-@media (max-width:780px){.list{flex-direction:row;overflow-x:auto;gap:6px;padding-bottom:4px;scrollbar-width:none}}
-.site{all:unset;cursor:pointer;display:grid;grid-template-columns:auto 1fr;gap:10px;padding:10px 10px;border-radius:6px;border-left:3px solid transparent}
-.site:hover{background:var(--paper)}
-.site[aria-current="true"]{background:var(--paper);border-left-color:var(--clay)}
-@media (max-width:780px){.site{flex:0 0 auto;border-left:0;border:1px solid var(--line);grid-template-columns:auto auto;align-items:center;padding:7px 10px}.site .d{display:none}.site[aria-current="true"]{border-color:var(--clay)}}
+/* ===== sections ===== */
+.block{padding-block:clamp(28px,4vw,48px);border-top:1px solid var(--line)}
+.block:first-of-type{border-top:0}
+.bh{display:grid;gap:6px;margin-bottom:clamp(14px,2vw,20px)}
+.bh h2{font-size:clamp(21px,1.6vw + 14px,30px)}
+.bh p{margin:0;color:var(--muted);font-size:15px;max-width:64ch}
+
+/* dossier: list + card */
+.dossier{display:grid;grid-template-columns:1fr;gap:var(--gap)}
+@media (min-width:1024px){.dossier{grid-template-columns:260px minmax(0,1fr)}}
+.list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;align-content:start}
+@media (min-width:768px){.list{grid-template-columns:repeat(4,minmax(0,1fr))}}
+@media (min-width:1024px){.list{grid-template-columns:1fr;gap:4px}}
+.site{all:unset;box-sizing:border-box;cursor:pointer;display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 10px;align-items:start;min-height:44px;padding:10px 12px;border-radius:10px;border:1px solid var(--line);background:var(--paper);min-width:0}
+.site:hover{border-color:var(--clay)}
+.site[aria-current="true"]{border-color:var(--clay);box-shadow:inset 3px 0 0 var(--clay)}
 .site .n{font:700 11px var(--mono);color:var(--clay);padding-top:3px}
 .site .t{font-weight:700;line-height:1.25;font-size:14.5px}
 .site .d{font:12px var(--mono);color:var(--muted)}
-.card{background:var(--paper);border:1px solid var(--line);border-radius:8px;overflow:hidden;min-width:0}
-.card-h{padding:20px 22px 14px;display:grid;gap:8px;border-bottom:1px solid var(--line);
+@media (max-width:767px){.site .d{display:none}}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;min-width:0}
+.card-h{padding:clamp(16px,2vw,22px);padding-bottom:14px;display:grid;gap:8px;border-bottom:1px solid var(--line);
   background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);background-size:22px 22px;background-position:-1px -1px}
-.card-h h2{font-size:clamp(21px,3.6vw,27px);background:var(--paper);justify-self:start;padding-right:6px}
-.facts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1px;background:var(--line);border-bottom:1px solid var(--line)}
-@media (max-width:560px){.facts{grid-template-columns:1fr}}
-.fact{background:var(--paper);padding:10px 14px}
+.card-h h2{font-size:clamp(20px,1.4vw + 14px,28px);background:var(--paper);justify-self:start;padding-right:6px;max-width:100%}
+.facts{display:grid;grid-template-columns:1fr;gap:1px;background:var(--line);border-bottom:1px solid var(--line)}
+@media (min-width:768px){.facts{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.fact{background:var(--paper);padding:12px 16px;min-width:0}
 .fact dt{font:700 10.5px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
-.fact dd{margin:2px 0 0;font-size:14px;font-weight:700}
-.risk{display:flex;gap:3px;margin-top:5px}.risk span{width:22px;height:5px;border-radius:2px;background:var(--line)}.risk span.f{background:var(--risk)}
-.tabs{display:flex;gap:0;border-bottom:1px solid var(--line);overflow-x:auto;scrollbar-width:none}
-.tab{all:unset;cursor:pointer;font:700 13px var(--body);padding:12px 16px;color:var(--muted);border-bottom:2px solid transparent;white-space:nowrap}
+.fact dd{margin:2px 0 0;font-size:14.5px;font-weight:700}
+.risk{display:flex;gap:3px;margin-top:6px}.risk span{width:22px;height:5px;border-radius:2px;background:var(--line)}.risk span.f{background:var(--risk)}
+.tabs{display:flex;border-bottom:1px solid var(--line);overflow-x:auto;scrollbar-width:none}
+.tab{all:unset;cursor:pointer;display:flex;align-items:center;min-height:48px;font:700 14px var(--body);padding:0 16px;color:var(--muted);border-bottom:2px solid transparent;white-space:nowrap}
 .tab[aria-selected="true"]{color:var(--fg);border-bottom-color:var(--glaze)}
-.tabpanel{padding:18px 22px 22px}
-.tabpanel p{margin:0 0 12px;max-width:66ch}
-.tabpanel ul{margin:0 0 12px;padding-left:20px;max-width:66ch}.tabpanel li{margin-bottom:6px}
-.compare{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
-@media (max-width:560px){.compare{grid-template-columns:1fr}}
-.src{border:1px solid var(--line);border-radius:6px;padding:12px 14px}
+.tabpanel{padding:clamp(16px,2vw,22px)}
+.tabpanel p{margin:0 0 12px;max-width:68ch}
+.tabpanel ul{margin:0 0 12px;padding-left:20px;max-width:68ch}.tabpanel li{margin-bottom:6px}
+.compare{display:grid;grid-template-columns:1fr;gap:12px;margin-bottom:14px}
+@media (min-width:768px){.compare{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.src{border:1px solid var(--line);border-radius:10px;padding:14px 16px;min-width:0}
 .src h4{margin:0 0 6px;font:700 11px var(--mono);letter-spacing:.1em;text-transform:uppercase}
 .src.oral h4{color:var(--clay)}.src.arch h4{color:var(--glaze)}
-.src p{margin:0;font-size:14.5px}
+.src p{margin:0;font-size:15px}
 .src.oral p{font-family:var(--display);font-style:italic}
-.verdict{border-left:3px solid var(--iron);padding:4px 0 4px 12px;font-size:14.5px;max-width:66ch}
-.lit{font:12.5px var(--mono);color:var(--muted);margin-top:10px}
-.actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}
-.btn{font:700 13px var(--body);text-decoration:none;color:var(--paper);background:var(--iron);border:1px solid var(--iron);border-radius:5px;padding:8px 13px;cursor:pointer}
+.verdict{border-left:3px solid var(--iron);padding:4px 0 4px 12px;font-size:15px;max-width:68ch}
+.actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:44px;font:700 14px var(--body);text-decoration:none;color:var(--paper);background:var(--iron);border:1px solid var(--iron);border-radius:8px;padding:0 16px;cursor:pointer;text-align:center}
 .btn.ghost{background:none;color:var(--fg);border-color:var(--line)}
-
-section.block{padding-block:26px;border-top:1px solid var(--line)}
-.bh{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:6px 16px;margin-bottom:16px}
-.bh h2{font-size:clamp(20px,3.4vw,26px)}
-.bh p{margin:4px 0 0;color:var(--muted);font-size:14px;max-width:60ch}
-
-/* route */
-.route{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0;counter-reset:s}
-@media (max-width:640px){.route{grid-template-columns:1fr}}
-.stop{position:relative;padding:14px 14px 14px 0;border-top:3px solid var(--glaze)}
-@media (max-width:640px){.stop{border-top:0;border-left:3px solid var(--glaze);padding:6px 0 14px 16px}}
-.stop::before{content:"";position:absolute;top:-8px;left:0;width:13px;height:13px;border-radius:50%;background:var(--paper);border:3px solid var(--glaze);box-sizing:border-box}
-@media (max-width:640px){.stop::before{top:6px;left:-8px}}
-.stop .k{font:700 11px var(--mono);color:var(--muted);letter-spacing:.08em}
-.stop .s{font-weight:700;margin:2px 0}
-.stop .x{font-size:13.5px;color:var(--muted)}
-.stop button{all:unset;cursor:pointer;color:var(--glaze);font:700 12.5px var(--body);margin-top:4px;display:inline-block}
+@media (max-width:479px){.actions .btn{flex:1 1 100%}}
 
 /* eras */
-.eras{overflow-x:auto}
-.era-row{display:grid;grid-template-columns:repeat(4,minmax(150px,1fr));gap:4px;min-width:620px}
-.era{background:var(--paper);border:1px solid var(--line);border-radius:6px;padding:12px;display:flex;flex-direction:column;gap:8px}
-.era .k{font:700 11px var(--mono);color:var(--muted)}
-.era h3{font-size:16px}
-.era .x{font-size:13px;color:var(--muted)}
-.pin{all:unset;cursor:pointer;display:flex;gap:6px;align-items:center;font:700 12.5px var(--body);border:1px solid var(--clay);color:var(--clay);border-radius:4px;padding:4px 7px;align-self:flex-start}
-.note{font:11.5px var(--mono);color:var(--muted);margin-top:8px}
+.era-row{display:grid;grid-template-columns:1fr;gap:var(--gap)}
+@media (min-width:480px){.era-row{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (min-width:1024px){.era-row{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.era{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:16px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.era .k{font:700 11.5px var(--mono);color:var(--muted)}
+.era h3{font-size:18px}
+.era .x{font-size:14px;color:var(--muted)}
+.pin{all:unset;box-sizing:border-box;cursor:pointer;display:flex;align-items:center;min-height:40px;font:700 13px var(--body);border:1px solid var(--clay);color:var(--clay);border-radius:8px;padding:6px 10px;max-width:100%}
+.note{font:12px var(--mono);color:var(--muted);margin-top:12px}
 
-/* survey */
-.survey{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px 28px}
-@media (max-width:700px){.survey{grid-template-columns:1fr}}
-.q h3{font:700 14.5px var(--body);margin:0 0 10px}
-.bar{display:grid;grid-template-columns:minmax(0,1fr) 44px;gap:3px 10px;align-items:center;margin-bottom:8px;font-size:13.5px}
-.bar .tr{grid-column:1/-1;height:9px;background:var(--line);border-radius:2px;overflow:hidden}
-.bar .tr i{display:block;height:100%;background:var(--muted)}
-.bar.top .tr i{background:var(--glaze)}
-.bar b{font:700 13px var(--mono);text-align:right;font-variant-numeric:tabular-nums}
-.bar span{min-width:0}
-.kpi{display:flex;flex-wrap:wrap;gap:6px 20px;font-size:13.5px;color:var(--muted);margin-bottom:16px}
-.kpi b{color:var(--fg);font-family:var(--mono)}
-
-/* plaque */
-.plaque-wrap{display:grid;grid-template-columns:auto minmax(0,1fr);gap:28px;align-items:center}
-@media (max-width:700px){.plaque-wrap{grid-template-columns:1fr;justify-items:center}}
-.plaque{width:300px;max-width:100%;border-radius:10px;padding:18px;color:#f3ede4;
+/* QR plaque */
+.plaque-wrap{display:grid;grid-template-columns:1fr;gap:28px;justify-items:center;align-items:center}
+@media (min-width:768px){.plaque-wrap{grid-template-columns:auto minmax(0,1fr);justify-items:start}}
+.plaque{width:100%;max-width:320px;border-radius:12px;padding:20px 18px;color:#f3ede4;
   background:linear-gradient(135deg,#4a4038,#2c251f 55%,#3d342c);box-shadow:inset 0 0 0 1px rgba(255,255,255,.12),0 10px 24px rgba(20,12,4,.3);position:relative}
 .plaque::before,.plaque::after{content:"";position:absolute;top:10px;width:7px;height:7px;border-radius:50%;background:#8d8378;box-shadow:inset 0 1px 1px rgba(0,0,0,.6)}
 .plaque::before{left:10px}.plaque::after{right:10px}
 .plaque .pk{font:700 10px var(--mono);letter-spacing:.14em;text-align:center;color:#d9b48f}
 .plaque h3{font-size:18px;text-align:center;margin:8px 0 4px;color:#fff}
 .plaque .pp{font:12px var(--mono);text-align:center;color:#cfc4b6}
-.qr{background:#fff;padding:10px;border-radius:4px;width:170px;height:170px;margin:14px auto 10px;box-sizing:content-box}
-.qr img,.qr canvas{width:170px!important;height:170px!important}
-.plaque .pl{display:flex;justify-content:center;gap:10px;font:700 10.5px var(--mono);color:#cfc4b6}
-.scheme{display:flex;flex-direction:column;gap:0;max-width:440px}
-.sc{display:grid;grid-template-columns:30px 1fr;gap:10px;padding-bottom:14px;position:relative}
-.sc:not(:last-child)::before{content:"";position:absolute;left:14px;top:28px;bottom:2px;width:1px;background:var(--line)}
+.qr{background:#fff;padding:10px;border-radius:6px;width:min(190px,100%);margin:14px auto 10px;overflow:hidden;line-height:0}
+.qr img,.qr canvas{width:100%;height:auto;max-width:100%}
+.plaque .pl{display:flex;flex-wrap:wrap;justify-content:center;gap:6px 10px;font:700 10.5px var(--mono);color:#cfc4b6}
+.scheme{display:flex;flex-direction:column;max-width:460px;width:100%}
+.sc{display:grid;grid-template-columns:30px minmax(0,1fr);gap:12px;padding-bottom:16px;position:relative}
+.sc:not(:last-child)::before{content:"";position:absolute;left:14px;top:30px;bottom:2px;width:1px;background:var(--line)}
 .sc .n{width:28px;height:28px;border-radius:50%;border:1px solid var(--line);display:grid;place-items:center;font:700 12px var(--mono);background:var(--paper)}
-.sc b{display:block;font-size:14.5px}.sc span{font-size:13.5px;color:var(--muted)}
+.sc b{display:block;font-size:15px}.sc span{font-size:14px;color:var(--muted)}
 
-.refs{margin:0;padding-left:20px;font-size:13.5px;color:var(--muted);max-width:75ch}.refs li{margin-bottom:5px}
-footer{color:var(--muted);font-size:12px;padding-block:6px 30px}
-@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+/* footer */
+.site-footer{border-top:1px solid var(--line);padding-block:24px 32px;color:var(--muted);font-size:13px}
+.site-footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px 24px;align-items:center}
+.site-footer p{margin:0;max-width:80ch}
+.site-footer a{color:var(--glaze);font-weight:700;min-height:44px;display:inline-flex;align-items:center}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important;scroll-behavior:auto!important}}
 </style>
-
-<div class="wrap">
-<header>
-  <div>
-    <div class="eyebrow" data-i="eyebrow">Қызылорда облысы · Жалағаш ауданы</div>
-    <h1 data-i="title">Жалағаш өлкетану картасы</h1>
-    <p class="sub" data-i="sub">Ұмыт қалған тарихи-сакралды нысандар: 3D орта, ғылыми анықтама және QR-тақтайшалар</p>
+</head>
+<body>
+<header class="site-header" id="top">
+  <div class="wrap bar">
+    <a class="logo" href="#map" aria-label="Жалағаш мұрасы — карта"><i>ЖЛ</i><span class="lt">ЖАЛАҒАШ МҰРАСЫ</span></a>
+    <nav aria-label="Негізгі мәзір"><ul class="menu">
+      <li><a href="#map" data-i="nMap">3D карта</a></li>
+      <li><a href="#sites" data-i="nSites">Нысандар</a></li>
+      <li><a href="#eras" data-i="nEras">Дәуірлер</a></li>
+      <li><a href="#plates" data-i="nQr">QR-тақтайша</a></li>
+    </ul></nav>
+    <div class="hactions">
+      <div class="lang" role="group" aria-label="Тіл">
+        <button id="l-kk" data-l="kk" aria-pressed="true">ҚАЗ</button>
+        <button id="l-ru" data-l="ru" aria-pressed="false">РУС</button>
+        <button id="l-en" data-l="en" aria-pressed="false">ENG</button>
+      </div>
+      <a class="back" href="qorgau.html" data-i="back">← Жобаға қайту</a>
+      <button class="burger" id="burger" aria-expanded="false" aria-controls="mpanel" aria-label="Мәзірді ашу"><span></span></button>
+    </div>
   </div>
-  <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><a href="qorgau.html" style="font:700 13px var(--body);text-decoration:none;color:var(--paper);background:var(--clay);border-radius:6px;padding:8px 12px">← Жобаға қайту</a>
-  <div class="lang" role="group" aria-label="Language">
-    <button id="l-kk" data-l="kk" aria-pressed="true">ҚАЗ</button>
-    <button id="l-ru" data-l="ru" aria-pressed="false">РУС</button>
-    <button id="l-en" data-l="en" aria-pressed="false">ENG</button>
-  </div></div>
+  <div class="mpanel" id="mpanel" hidden>
+    <div class="wrap">
+      <ul>
+        <li><a href="#map" data-i="nMap">3D карта</a></li>
+        <li><a href="#sites" data-i="nSites">Нысандар</a></li>
+        <li><a href="#eras" data-i="nEras">Дәуірлер</a></li>
+        <li><a href="#plates" data-i="nQr">QR-тақтайша</a></li>
+      </ul>
+      <div class="lang" role="group" aria-label="Тіл">
+        <button data-l="kk" aria-pressed="true">ҚАЗ</button>
+        <button data-l="ru" aria-pressed="false">РУС</button>
+        <button data-l="en" aria-pressed="false">ENG</button>
+      </div>
+      <a class="back" href="qorgau.html" data-i="back">← Жобаға қайту</a>
+    </div>
+  </div>
 </header>
-</div>
 
-<div class="stage" id="stage">
-  <canvas id="c" aria-label="3D map"></canvas>
-  <div id="labels"></div>
-  <div class="tools">
-    <div class="tg">
-      <button class="tbtn" id="t-route" aria-pressed="true" data-i="tRoute">Маршрут</button>
-      <button class="tbtn" id="t-reset" data-i="tReset">Жалпы көрініс</button>
-    </div>
-    <div class="compass" title="Солтүстік">N<br>▲</div>
-  </div>
-  <div class="legend">
-    <span><i style="background:#3f8f9a"></i><span data-i="lgSyr">Сырдария</span></span>
-    <span><i style="background:#e5dcc6;outline:1px solid #b9a98a"></i><span data-i="lgOld">Құрғақ арна</span></span>
-    <span><i style="background:var(--glaze)"></i><span data-i="lgRoute">Өлкетану соқпағы</span></span>
-  </div>
-</div>
-
-<div class="wrap">
-  <div class="dossier">
-    <nav class="list" id="list" aria-label="Sites"></nav>
-    <article class="card" id="card" aria-live="polite"></article>
-  </div>
-
-  <section class="block">
-    <div class="bh"><div><div class="eyebrow" data-i="eEy">Тарихи қабаттар</div><h2 data-i="eH">Дәуірлер бойынша нысандар</h2>
-      <p data-i="eP">Сыр өңірінің тарихи географиясы: сақ-апасиактардан Қазақ хандығы мен кеңес кезеңіне дейін.</p></div></div>
-    <div class="eras"><div class="era-row" id="eraRow"></div></div>
-    <div class="note" data-i="eNote">Шкала сызықтық емес: әр баған бір тарихи кезеңді көрсетеді.</div>
-  </section>
-
-  <section class="block">
-    <div class="bh"><div><div class="eyebrow" data-i="qEy">«QR-Тарих» жобасы</div><h2 data-i="qH">Нысан басындағы тақтайша</h2>
-      <p data-i="qP">Металл тақтайшадағы QR-код осы беттің таңдалған нысанын ашады. Тақтайша үлгісі таңдалған нысанмен бірге ауысады.</p></div></div>
-    <div class="plaque-wrap">
-      <div class="plaque" id="plaque"></div>
-      <div class="scheme" id="scheme"></div>
+<main>
+  <section class="intro" aria-labelledby="h1">
+    <div class="wrap">
+      <div class="eyebrow" data-i="eyebrow">Қызылорда облысы · Жалағаш ауданы</div>
+      <h1 id="h1" data-i="title">Жалағаш өлкетану картасы</h1>
+      <p class="sub" data-i="sub">Ұмыт қалған тарихи-сакралды нысандар: 3D орта, ғылыми анықтама және QR-тақтайшалар</p>
     </div>
   </section>
-  <footer data-i="foot">Координаттар схемалық, нақты GPS-нүктелер далалық зерттеуден кейін бекітіледі. «Жалағаш өңіріндегі ұмыт қалған тарихи орындар мен сакралды нысандарды зерттеу, цифрландыру және туристік айналымға енгізу» ғылыми жобасы, 2026.</footer>
-</div>
+
+  <section id="map" aria-label="3D карта">
+    <div class="stage" id="stage">
+      <canvas id="c" aria-label="3D map"></canvas>
+      <div id="labels"></div>
+      <div class="tools">
+        <div class="tg">
+          <button class="tbtn" id="t-route" aria-pressed="true" data-i="tRoute">Маршрут</button>
+          <button class="tbtn" id="t-reset" data-i="tReset">Жалпы көрініс</button>
+        </div>
+        <div class="compass" title="Солтүстік">N<br>▲</div>
+      </div>
+      <div class="legend">
+        <span><i class="lg-syr"></i><span data-i="lgSyr">Сырдария</span></span>
+        <span><i class="lg-old"></i><span data-i="lgOld">Құрғақ арна</span></span>
+        <span><i class="lg-route"></i><span data-i="lgRoute">Өлкетану соқпағы</span></span>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="sites" aria-label="Нысандар">
+    <div class="wrap">
+      <div class="dossier">
+        <nav class="list" id="list" aria-label="Sites"></nav>
+        <article class="card" id="card" aria-live="polite"></article>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="eras">
+    <div class="wrap">
+      <div class="bh"><div class="eyebrow" data-i="eEy">Тарихи қабаттар</div><h2 data-i="eH">Дәуірлер бойынша нысандар</h2>
+        <p data-i="eP">Сыр өңірінің тарихи географиясы: сақ-апасиактардан Қазақ хандығы мен кеңес кезеңіне дейін.</p></div>
+      <div class="era-row" id="eraRow"></div>
+      <div class="note" data-i="eNote">Шкала сызықтық емес: әр баған бір тарихи кезеңді көрсетеді.</div>
+    </div>
+  </section>
+
+  <section class="block" id="plates">
+    <div class="wrap">
+      <div class="bh"><div class="eyebrow" data-i="qEy">«QR-Тарих» жобасы</div><h2 data-i="qH">Нысан басындағы тақтайша</h2>
+        <p data-i="qP">Әр нысанның QR-коды өзінің жеке карточкасын ашады. Тақтайша үлгісі таңдалған нысанмен бірге ауысады.</p></div>
+      <div class="plaque-wrap">
+        <div class="plaque" id="plaque"></div>
+        <div class="scheme" id="scheme"></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <p data-i="foot">Координаттар схемалық, нақты GPS-нүктелер далалық зерттеуден кейін бекітіледі.</p>
+    <a href="qorgau.html" data-i="back">← Жобаға қайту</a>
+  </div>
+</footer>
 
 <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
@@ -227,7 +299,7 @@ footer{color:var(--muted);font-size:12px;padding-block:6px 30px}
 const PAGE_URL = "https://skakovizbasar5-alt.github.io/zhalagashkoneoryndar/";
 
 const UI = {
- kk:{eyebrow:"Қызылорда облысы · Жалағаш ауданы",title:"Жалағаш өлкетану картасы",sub:"Ұмыт қалған тарихи-сакралды нысандар: 3D орта, ғылыми анықтама және QR-тақтайшалар",
+ kk:{nMap:"3D карта",nSites:"Нысандар",nEras:"Дәуірлер",nQr:"QR-тақтайша",back:"← Жобаға қайту",eyebrow:"Қызылорда облысы · Жалағаш ауданы",title:"Жалағаш өлкетану картасы",sub:"Ұмыт қалған тарихи-сакралды нысандар: 3D орта, ғылыми анықтама және QR-тақтайшалар",
   tRoute:"Маршрут",tReset:"Жалпы көрініс",lgSyr:"Сырдария",lgOld:"Құрғақ арна",lgRoute:"Өлкетану соқпағы",
   period:"Дәуірі",place:"Орны",risk:"Қауіп деңгейі",riskL:["","Орташа","Жоғары","Өте жоғары"],
   tabs:["Тарихы","Аңыз бен дерек","Сақтау шаралары"],oral:"Ауызша тарих",arch:"Археологиялық дерек",lit:"Әдебиет",
@@ -241,7 +313,7 @@ const UI = {
   plaqueK:"ЖАЛАҒАШ · ТАРИХИ ЕСКЕРТКІШ",plaqueS:"Сканерлеңіз",town:"Жалағаш",syr:"Сырдария",zhana:"Жаңадария (ескі арна)",
   scheme:[["Сканерлеу","Смартфон камерасын тақтайшаға бағыттау"],["Нысан карточкасы","Тек осы нысанға арналған жеке бет ашылады"],["Ғылыми анықтама","Тарихы, аңыз бен дерек, сақтау шаралары"],["3D визуализация","Нысанның қайта жаңғыртылған моделі"],["Үш тіл","Қазақ, орыс, ағылшын"]],
   kpi:[["150","респондент"],["100","оқушы"],["30","мұғалім"],["20","тұрғын"]]},
- ru:{eyebrow:"Кызылординская область · Жалагашский район",title:"Краеведческая карта Жалагаша",sub:"Забытые историко-сакральные объекты: 3D-среда, научная справка и QR-таблички",
+ ru:{nMap:"3D-карта",nSites:"Объекты",nEras:"Эпохи",nQr:"QR-табличка",back:"← К проекту",eyebrow:"Кызылординская область · Жалагашский район",title:"Краеведческая карта Жалагаша",sub:"Забытые историко-сакральные объекты: 3D-среда, научная справка и QR-таблички",
   tRoute:"Маршрут",tReset:"Общий вид",lgSyr:"Сырдарья",lgOld:"Сухое русло",lgRoute:"Краеведческая тропа",
   period:"Эпоха",place:"Место",risk:"Уровень угрозы",riskL:["","Средний","Высокий","Очень высокий"],
   tabs:["История","Легенда и факты","Меры сохранения"],oral:"Устная история",arch:"Археологические данные",lit:"Литература",
@@ -255,7 +327,7 @@ const UI = {
   plaqueK:"ЖАЛАГАШ · ПАМЯТНИК ИСТОРИИ",plaqueS:"Сканируйте",town:"Жалагаш",syr:"Сырдарья",zhana:"Жанадарья (старое русло)",
   scheme:[["Сканирование","Наведите камеру смартфона на табличку"],["Карточка объекта","Открывается отдельная страница этого объекта"],["Научная справка","История, легенда и факты, меры сохранения"],["3D-визуализация","Реконструированная модель объекта"],["Три языка","Казахский, русский, английский"]],
   kpi:[["150","респондентов"],["100","учащихся"],["30","учителей"],["20","жителей"]]},
- en:{eyebrow:"Kyzylorda Region · Zhalagash District",title:"Zhalagash Heritage Map",sub:"Forgotten historical and sacred sites: 3D scene, research notes and QR plaques",
+ en:{nMap:"3D map",nSites:"Sites",nEras:"Periods",nQr:"QR plaque",back:"← Back to project",eyebrow:"Kyzylorda Region · Zhalagash District",title:"Zhalagash Heritage Map",sub:"Forgotten historical and sacred sites: 3D scene, research notes and QR plaques",
   tRoute:"Route",tReset:"Overview",lgSyr:"Syr Darya",lgOld:"Dry channel",lgRoute:"Heritage trail",
   period:"Period",place:"Location",risk:"Threat level",riskL:["","Moderate","High","Very high"],
   tabs:["History","Legend vs evidence","Conservation"],oral:"Oral history",arch:"Archaeological evidence",lit:"Literature",
@@ -595,6 +667,12 @@ function place(el,p,dy){
   geoLabels.forEach(g=>place(g.el,g.o.position,g.dy));
 })();
 
+const burger=document.getElementById("burger"),mp=document.getElementById("mpanel"),hdr=document.getElementById("top");
+function setMenu(o){burger.setAttribute("aria-expanded",o);burger.setAttribute("aria-label",o?"Мәзірді жабу":"Мәзірді ашу");mp.hidden=!o;}
+burger.addEventListener("click",()=>setMenu(burger.getAttribute("aria-expanded")!=="true"));
+mp.addEventListener("click",e=>{if(e.target.closest("a"))setMenu(false);});
+addEventListener("keydown",e=>{if(e.key==="Escape"&&!mp.hidden){setMenu(false);burger.focus();}});
+matchMedia("(min-width:1024px)").addEventListener("change",e=>{if(e.matches)setMenu(false);});
 try{const l=localStorage.getItem("zh-lang");if(l&&UI[l])lang=l;}catch(e){}
 const start=SITES.findIndex(s=>"#"+s.id===location.hash);
 setLang(lang);select(start>=0?start:0,start>=0);
