@@ -202,24 +202,11 @@ footer{color:var(--muted);font-size:12px;padding-block:6px 30px}
     <article class="card" id="card" aria-live="polite"></article>
   </div>
 
-  <section class="block" id="route">
-    <div class="bh"><div><div class="eyebrow" data-i="rEy">Ұсыныс 3</div><h2 data-i="rH">«Жалағаш өлкетану соқпағы»</h2>
-      <p data-i="rP">7–11 сынып оқушыларына арналған көктемгі-күзгі танымдық-экологиялық экскурсия бағыты.</p></div></div>
-    <div class="route" id="routeList"></div>
-  </section>
-
   <section class="block">
     <div class="bh"><div><div class="eyebrow" data-i="eEy">Тарихи қабаттар</div><h2 data-i="eH">Дәуірлер бойынша нысандар</h2>
       <p data-i="eP">Сыр өңірінің тарихи географиясы: сақ-апасиактардан Қазақ хандығы мен кеңес кезеңіне дейін.</p></div></div>
     <div class="eras"><div class="era-row" id="eraRow"></div></div>
     <div class="note" data-i="eNote">Шкала сызықтық емес: әр баған бір тарихи кезеңді көрсетеді.</div>
-  </section>
-
-  <section class="block">
-    <div class="bh"><div><div class="eyebrow" data-i="sEy">Сауалнама · 2023–2024 оқу жылы</div><h2 data-i="sH">Тұрғындар не біледі?</h2>
-      <p data-i="sP">Тарихи орындар туралы ақпараттану деңгейін анықтау сауалнамасы.</p></div></div>
-    <div class="kpi" id="kpi"></div>
-    <div class="survey" id="survey"></div>
   </section>
 
   <section class="block">
@@ -229,19 +216,6 @@ footer{color:var(--muted);font-size:12px;padding-block:6px 30px}
       <div class="plaque" id="plaque"></div>
       <div class="scheme" id="scheme"></div>
     </div>
-  </section>
-
-  <section class="block">
-    <div class="bh"><div><div class="eyebrow" data-i="lEy">Дереккөздер</div><h2 data-i="lH">Пайдаланылған әдебиеттер</h2></div></div>
-    <ol class="refs">
-      <li>Байпақов К.М. Қазақстанның ортағасырлық қалалары мен қоныстары. — Алматы: Ғылым, 2010.</li>
-      <li>Толстов С.П. По следам древнехорезмийской цивилизации. — М.-Л.: Изд-во АН СССР, 1948.</li>
-      <li>Сыр елі. Энциклопедия / Бас ред. Б.Ғ. Аяған. — Алматы: Қазақ энциклопедиясы, 2013.</li>
-      <li>Курманкулов Ж. Археологические исследования на городище Чирик-Рабат // Известия НАН РК. — 2008. — №1.</li>
-      <li>Қожа Ұ. Сыр бойындағы ортағасырлық қалалар тарихы. — Түркістан: Туран, 2011.</li>
-      <li>Қазақстанның киелі жерлерінің географиясы. — Астана: Фолиант, 2017.</li>
-      <li>Жалағаш аудандық тарихи-өлкетану музейінің құжаттық қоры мен архиві.</li>
-    </ol>
   </section>
   <footer data-i="foot">Координаттар схемалық, нақты GPS-нүктелер далалық зерттеуден кейін бекітіледі. «Жалағаш өңіріндегі ұмыт қалған тарихи орындар мен сакралды нысандарды зерттеу, цифрландыру және туристік айналымға енгізу» ғылыми жобасы, 2026.</footer>
 </div>
@@ -442,11 +416,11 @@ function renderPlaque(){
 function renderStatic(){
   const u=UI[lang];
   $("#scheme").innerHTML=u.scheme.map((r,i)=>`<div class="sc"><span class="n">${i+1}</span><div><b>${r[0]}</b><span>${r[1]}</span></div></div>`).join("");
-  $("#kpi").innerHTML=u.kpi.map(k=>`<span><b>${k[0]}</b> ${k[1]}</span>`).join("");
-  $("#survey").innerHTML=SURVEY[lang].map(([q,a,top])=>`<div class="q"><h3>${q}</h3>${a.map(([l,v],i)=>`<div class="bar ${i===top?"top":""}"><span>${l}</span><b>${v}%</b><div class="tr"><i style="width:${v}%"></i></div></div>`).join("")}</div>`).join("");
-  $("#routeList").innerHTML=ROUTE.order.map((k,i)=>{const r=ROUTE[lang][k],si=SITES.findIndex(s=>s.id===k);
+  if($("#kpi"))$("#kpi").innerHTML=u.kpi.map(k=>`<span><b>${k[0]}</b> ${k[1]}</span>`).join("");
+  if($("#survey"))$("#survey").innerHTML=SURVEY[lang].map(([q,a,top])=>`<div class="q"><h3>${q}</h3>${a.map(([l,v],i)=>`<div class="bar ${i===top?"top":""}"><span>${l}</span><b>${v}%</b><div class="tr"><i style="width:${v}%"></i></div></div>`).join("")}</div>`).join("");
+  if($("#routeList")){$("#routeList").innerHTML=ROUTE.order.map((k,i)=>{const r=ROUTE[lang][k],si=SITES.findIndex(s=>s.id===k);
     return `<div class="stop"><div class="k">${String(i+1).padStart(2,"0")}</div><div class="s">${r[0]}</div><div class="x">${r[1]}</div>${si>=0?`<button data-s="${si}">${u.onMap} →</button>`:""}</div>`}).join("");
-  $("#routeList").querySelectorAll("button").forEach(b=>b.onclick=()=>{select(+b.dataset.s,true);stage.scrollIntoView({behavior:"smooth"})});
+  $("#routeList").querySelectorAll("button").forEach(b=>b.onclick=()=>{select(+b.dataset.s,true);stage.scrollIntoView({behavior:"smooth"})});}
   $("#eraRow").innerHTML=ERAS[lang].map((e,i)=>`<div class="era"><div class="k">${e[0]}</div><h3>${e[1]}</h3><div class="x">${e[2]}</div>
     ${SITES.map((s,j)=>s.era===i?`<button class="pin" data-s="${j}">${s.code} · ${s[lang].short}</button>`:"").join("")}</div>`).join("");
   $("#eraRow").querySelectorAll(".pin").forEach(b=>b.onclick=()=>{select(+b.dataset.s,true);stage.scrollIntoView({behavior:"smooth"})});
