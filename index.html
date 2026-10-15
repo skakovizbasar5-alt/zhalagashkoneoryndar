@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<style>:root{color-scheme:light;padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom)}body{margin:0;font:14px system-ui,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
+<style>*,*::before,*::after{box-sizing:border-box}:root{color-scheme:light;padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom)}body{margin:0;font:14px system-ui,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
 </head>
 <body>
 <title>Жалағаш өлкетану картасы</title>
@@ -24,7 +24,8 @@
   --glaze:#4db5ae; --clay:#de8e5e; --iron:#e7dccb; --sky:#1d1813; --risk:#e8705a; color-scheme:dark}
 html,body{background:var(--bg);color:var(--fg)}
 body{font-family:var(--body);font-size:15.5px;line-height:1.55}
-.wrap{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));max-width:1080px;margin:0 auto}
+.wrap{width:100%;max-width:1440px;margin-inline:auto;padding-left:max(var(--pad,16px),env(safe-area-inset-left,0px));padding-right:max(var(--pad,16px),env(safe-area-inset-right,0px))}
+@media (min-width:768px){.wrap{--pad:24px}}@media (min-width:1024px){.wrap{--pad:40px}}
 :focus-visible{outline:2px solid var(--glaze);outline-offset:2px}
 h1,h2,h3{font-family:var(--display);line-height:1.15;text-wrap:balance;margin:0}
 .eyebrow{font:700 11px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--clay)}
